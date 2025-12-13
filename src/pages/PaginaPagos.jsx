@@ -136,7 +136,19 @@ function PaginaPagos() {
   };
 
   return (
-    <Container maxWidth="md">
+    <Box sx={{
+      minHeight: '100vh',
+      width: '100vw',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: '#fff9e6',
+      overflow: 'auto',
+      py: 4,
+    }}>
+      <Container maxWidth="md">
       <Paper sx={{ p: { xs: 2, md: 4 }, mb: 4, borderRadius: 2 }}>
         <Typography variant="h5" component="h2" gutterBottom>
           {id ? 'Editar Pago Existente' : 'Registrar Nuevo Pago'}
@@ -255,7 +267,8 @@ function PaginaPagos() {
           </List>
         </Paper>
       )}
-    </Container>
+      </Container>
+    </Box>
   );
 }
 

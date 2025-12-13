@@ -7,6 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 function RegisterPage() {
   const [usuario, setUsuario] = useState('');
   const [correo, setCorreo] = useState('');
+  const [telefono, setTelefono] = useState('');
   const [clave, setClave] = useState('');
   const [repetirClave, setRepetirClave] = useState('');
   const [error, setError] = useState('');
@@ -23,6 +24,7 @@ function RegisterPage() {
       await axios.post(`${API_URL}/registro/`, {
         nombre: usuario,        // <- Aquí usa "nombre" porque así lo espera tu backend
         email: correo,          // <- Aquí usa "email" por compatibilidad backend
+        telefono: telefono,     // <- Campo de teléfono
         clave: clave
       });
       // Redirige directamente al login después del registro exitoso
@@ -55,6 +57,14 @@ function RegisterPage() {
           />
           <input
             style={styles.input}
+            type="tel"
+            placeholder="Teléfono"
+            value={telefono}
+            onChange={e => setTelefono(e.target.value)}
+            required
+          />
+          <input
+            style={styles.input}
             type="password"
             placeholder="Clave"
             value={clave}
@@ -80,55 +90,74 @@ function RegisterPage() {
 const styles = {
   background: {
     minHeight: '100vh',
-    backgroundColor: '#111',
+    width: '100vw',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(135deg, #FF6B35 0%, #F7931E 25%, #C724B1 75%, #8B5CF6 100%)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: '20px',
+    overflow: 'auto',
   },
   card: {
-    background: '#232323',
-    padding: '36px 32px',
-    borderRadius: 12,
-    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-    width: 350,
+    background: 'rgba(255, 255, 255, 0.95)',
+    padding: '48px 40px',
+    borderRadius: 20,
+    boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+    width: '100%',
+    maxWidth: 420,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    backdropFilter: 'blur(10px)',
   },
   title: {
-    color: '#fff',
-    margin: '0 0 24px 0',
-    fontWeight: 700,
-    fontSize: '2rem',
-    textAlign: 'center'
+    background: 'linear-gradient(135deg, #FF6B35, #C724B1)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    margin: '0 0 32px 0',
+    fontWeight: 800,
+    fontSize: '2.5rem',
+    textAlign: 'center',
   },
   input: {
     width: '100%',
     margin: '10px 0',
-    padding: '14px',
-    borderRadius: 6,
-    border: 'none',
-    background: '#484848',
-    color: '#fff',
+    padding: '16px 20px',
+    borderRadius: 12,
+    border: '2px solid transparent',
+    background: '#f8f9fa',
+    color: '#1a1a1a',
     fontSize: '1rem',
     outline: 'none',
+    transition: 'all 0.3s ease',
+    fontWeight: 500,
   },
   button: {
-    background: '#81bfff',
-    color: '#232323',
+    background: 'linear-gradient(135deg, #FF6B35, #C724B1)',
+    color: '#fff',
     width: '100%',
-    marginTop: 20,
-    padding: '12px 0',
+    marginTop: 24,
+    padding: '16px 0',
     border: 'none',
-    borderRadius: 6,
+    borderRadius: 12,
     fontWeight: 700,
-    fontSize: '1rem',
+    fontSize: '1.1rem',
     cursor: 'pointer',
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    boxShadow: '0 4px 15px rgba(199, 36, 177, 0.3)',
   },
   error: {
-    color: 'red',
-    marginTop: 10,
-    fontSize: '0.9rem'
+    color: '#dc3545',
+    marginTop: 16,
+    fontSize: '0.95rem',
+    fontWeight: 500,
+    textAlign: 'center',
   }
 };
 

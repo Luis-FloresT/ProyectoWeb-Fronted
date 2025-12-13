@@ -78,7 +78,19 @@ function PaginaReservas() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="lg" sx={{ py: 4, minHeight: '100vh', background: '#fff9e6' }}>
+      <Box sx={{
+        minHeight: '100vh',
+        width: '100vw',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: '#fff9e6',
+        overflow: 'auto',
+        py: 4,
+      }}>
+        <Container maxWidth="lg">
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
           <Button
             startIcon={<ArrowBackIcon />}
@@ -209,7 +221,8 @@ function PaginaReservas() {
 
         {loading && <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}><CircularProgress /></Box>}
         {error && <Alert severity="error">{error}</Alert>}
-      </Container>
+        </Container>
+      </Box>
     </ThemeProvider>
   );
 }
