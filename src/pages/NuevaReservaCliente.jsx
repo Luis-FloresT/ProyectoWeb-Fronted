@@ -86,12 +86,19 @@ function NuevaReservaCliente() {
     <Box
       sx={{
         minHeight: "100vh",
+        width: "100vw",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         background:
           "linear-gradient(135deg, #FF6B9D 0%, #FFD3E2 50%, #FFEFD5 100%)",
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
         py: 6,
+        overflow: "auto",
       }}
     >
       <Container maxWidth="lg">
