@@ -211,6 +211,7 @@ function PaginaReservas() {
         {error && <Alert severity="error">{error}</Alert>}
       </Container>
     </ThemeProvider>
+    
   );
 }
 

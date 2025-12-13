@@ -6,9 +6,10 @@ import PaginaInicio from './pages/PaginaInicio';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import PaginaReservas from './pages/PaginaReservas';
-import CrearReservaForm from './pages/CrearReservaForm';
+import NuevaReserva from "./pages/NuevaReserva";
 import PaginaPagos from './pages/PaginaPagos';
 import PaginaCancelaciones from './pages/PaginaCancelaciones';
+
 
 import './App.css';
 
@@ -31,7 +32,7 @@ function App() {
       />
       <Route 
         path="/reservas/nueva" 
-        element={token ? <CrearReservaForm /> : <Navigate to="/login" replace />} 
+        element={token ? <NuevaReserva /> : <Navigate to="/login" replace />}
       />
       <Route 
         path="/pagos" 
@@ -41,10 +42,12 @@ function App() {
         path="/cancelaciones" 
         element={token ? <PaginaCancelaciones /> : <Navigate to="/login" replace />} 
       />
-
+      
       {/* Ruta por defecto */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+
+    
   );
 }
 
