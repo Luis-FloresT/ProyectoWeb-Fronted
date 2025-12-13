@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { getServicios, getCombos, getPromociones } from '../apiService';
+import { getServicios, getCombos, getPromociones, addToCarrito, getCarrito } from '../apiService';
 import {
   Container,
   Box,
@@ -14,9 +14,14 @@ import {
   CircularProgress,
   Alert,
   Chip,
+  IconButton,
+  Badge,
+  Snackbar,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CelebrationIcon from '@mui/icons-material/Celebration';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const logoLeft = "/logo.png";
 
@@ -55,6 +60,9 @@ export default function PaginaInicio() {
   const [promociones, setPromociones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [carritoCount, setCarritoCount] = useState(0);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMsg, setSnackbarMsg] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,7 +82,48 @@ export default function PaginaInicio() {
       }
     };
     fetchData();
-  }, []);
+    
+    // Cargar contador del carrito si hay token
+    if (token) {
+      fetchCarritoCount();
+    }
+  }, [token]);
+
+  const fetchCarritoCount = async () => {
+    try {
+      const res = await getCarrito();
+      setCarritoCount(res.data.length || 0);
+    } catch (err) {
+      // Si falla (endpoint no implementado), usar 0
+      setCarritoCount(0);
+    }
+  };
+
+  const handleAddToCarrito = async (item, tipo) => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const data = {
+        tipo: tipo, // 'servicio', 'combo', 'promocion'
+        cantidad: 1,
+      };
+      
+      if (tipo === 'servicio') data.servicio = item.id;
+      if (tipo === 'combo') data.combo = item.id;
+      if (tipo === 'promocion') data.promocion = item.id;
+
+      await addToCarrito(data);
+      setSnackbarMsg(`✅ ${item.nombre} agregado al carrito`);
+      setSnackbarOpen(true);
+      fetchCarritoCount(); // Actualizar contador
+    } catch (err) {
+      setSnackbarMsg('⚠️ Error agregando al carrito (endpoint no implementado)');
+      setSnackbarOpen(true);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -184,7 +233,22 @@ export default function PaginaInicio() {
             )}
           </nav>
 
-          <div style={{ display: "flex", gap: "10px" }}>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            {/* Icono del carrito con contador */}
+            {token && (
+              <IconButton 
+                onClick={() => navigate('/carrito')}
+                sx={{ 
+                  color: '#fff',
+                  '&:hover': { transform: 'scale(1.1)' }
+                }}
+              >
+                <Badge badgeContent={carritoCount} color="error">
+                  <ShoppingCartIcon sx={{ fontSize: 32 }} />
+                </Badge>
+              </IconButton>
+            )}
+            
             {!token ? (
               <>
                 <button
@@ -308,7 +372,9 @@ export default function PaginaInicio() {
                     <Box
                       sx={{
                         height: 250,
-                        background: serviceColors[index % serviceColors.length],
+                        background: servicio.imagen 
+                          ? `url(${servicio.imagen}) center/cover no-repeat` 
+                          : serviceColors[index % serviceColors.length],
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -318,12 +384,14 @@ export default function PaginaInicio() {
                         overflow: "hidden",
                       }}
                     >
-                      <span style={{
-                        fontSize: "100px",
-                        filter: "drop-shadow(3px 3px 6px rgba(0,0,0,0.2))",
-                      }}>
-                        🎈
-                      </span>
+                      {!servicio.imagen && (
+                        <span style={{
+                          fontSize: "100px",
+                          filter: "drop-shadow(3px 3px 6px rgba(0,0,0,0.2))",
+                        }}>
+                          🎈
+                        </span>
+                      )}
                     </Box>
 
                     {/* Contenido */}
@@ -366,6 +434,25 @@ export default function PaginaInicio() {
                         onClick={handleReservar}
                       >
                         🎯 Reservar
+                      </Button>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        startIcon={<AddShoppingCartIcon />}
+                        sx={{
+                          background: "linear-gradient(135deg, #FFC74F 0%, #FFE66D 100%)",
+                          color: "#fff",
+                          fontWeight: "bold",
+                          borderRadius: "15px",
+                          textTransform: "none",
+                          fontSize: "15px",
+                          "&:hover": {
+                            background: "linear-gradient(135deg, #FFE66D 0%, #FFC74F 100%)",
+                          },
+                        }}
+                        onClick={() => handleAddToCarrito(servicio, 'servicio')}
+                      >
+                        Agregar al Carrito
                       </Button>
                       <Button
                         fullWidth
@@ -506,6 +593,25 @@ export default function PaginaInicio() {
                       >
                         🎯 Reservar Combo
                       </Button>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        startIcon={<AddShoppingCartIcon />}
+                        sx={{
+                          background: "linear-gradient(135deg, #FF6B9D 0%, #FF8C94 100%)",
+                          color: "#fff",
+                          fontWeight: "bold",
+                          borderRadius: "15px",
+                          textTransform: "none",
+                          fontSize: "15px",
+                          "&:hover": {
+                            background: "linear-gradient(135deg, #FF8C94 0%, #FF6B9D 100%)",
+                          },
+                        }}
+                        onClick={() => handleAddToCarrito(combo, 'combo')}
+                      >
+                        Agregar al Carrito
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -638,6 +744,25 @@ export default function PaginaInicio() {
                       >
                         🎯 Aprovechar Ahora
                       </Button>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        startIcon={<AddShoppingCartIcon />}
+                        sx={{
+                          background: "linear-gradient(135deg, #FF6B9D 0%, #FF8C94 100%)",
+                          color: "#fff",
+                          fontWeight: "bold",
+                          borderRadius: "15px",
+                          textTransform: "none",
+                          fontSize: "15px",
+                          "&:hover": {
+                            background: "linear-gradient(135deg, #FF8C94 0%, #FF6B9D 100%)",
+                          },
+                        }}
+                        onClick={() => handleAddToCarrito(promo, 'promocion')}
+                      >
+                        Agregar al Carrito
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -679,6 +804,15 @@ export default function PaginaInicio() {
             Haz que tu fiesta sea inolvidable • Diversión garantizada • ¡Contacta con nosotros!
           </Typography>
         </Box>
+
+        {/* Snackbar para notificaciones */}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => setSnackbarOpen(false)}
+          message={snackbarMsg}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        />
       </div>
     </ThemeProvider>
   );

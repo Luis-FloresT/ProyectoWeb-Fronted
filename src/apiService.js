@@ -113,3 +113,10 @@ export const getCancelacion = (id) => api.get(`/cancelaciones/${id}/`);
 export const createCancelacion = (data) => api.post('/cancelaciones/', data);
 export const updateCancelacion = (id, data) => api.put(`/cancelaciones/${id}/`, data);
 export const deleteCancelacion = (id) => api.delete(`/cancelaciones/${id}/`);
+
+/* ========= CARRITO DE COMPRAS ========= */
+
+export const getCarrito = () => api.get('/carrito/');
+export const addToCarrito = (data) => api.post('/carrito/', data);
+export const deleteItemCarrito = (id) => api.delete(`/carrito/${id}/`);
+export const confirmarCarrito = (data) => api.post('/carrito/confirmar/', data);

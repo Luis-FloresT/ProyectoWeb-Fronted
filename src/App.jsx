@@ -9,6 +9,7 @@ import PaginaReservas from './pages/PaginaReservas';
 import NuevaReserva from "./pages/NuevaReserva";
 import PaginaPagos from './pages/PaginaPagos';
 import PaginaCancelaciones from './pages/PaginaCancelaciones';
+import PaginaCarrito from './pages/PaginaCarrito';
 
 
 import './App.css';
@@ -26,6 +27,10 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
       
       {/* Rutas protegidas - requieren autenticación */}
+      <Route 
+        path="/carrito" 
+        element={token ? <PaginaCarrito /> : <Navigate to="/login" replace />} 
+      />
       <Route 
         path="/reservas" 
         element={token ? <PaginaReservas /> : <Navigate to="/login" replace />} 
