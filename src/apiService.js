@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
 
 // Crear instancia de axios para la API
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URL,
 });
 
 /* ========= INTERCEPTORES ========= */
@@ -14,23 +14,23 @@ const api = axios.create({
 // Interceptor para autenticación Tipo Token
 // Lee el token actual (del usuario logueado) en cada petición
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token'); // aquí debes guardar el token al hacer login
-    if (token) {
-      config.headers.Authorization = `Token ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
+  (config) => {
+    const token = localStorage.getItem('token'); // aquí debes guardar el token al hacer login
+    if (token) {
+      config.headers.Authorization = `Token ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
 // Interceptor de errores global (se ejecuta después de la request)
 // NO lanza alertas automáticos - cada página maneja sus propios errores
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    return Promise.reject(error);
-  }
+  (response) => response,
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 /* ========= AUTH ========= */
@@ -114,9 +114,16 @@ export const createCancelacion = (data) => api.post('/cancelaciones/', data);
 export const updateCancelacion = (id, data) => api.put(`/cancelaciones/${id}/`, data);
 export const deleteCancelacion = (id) => api.delete(`/cancelaciones/${id}/`);
 
-/* ========= CARRITO DE COMPRAS ========= */
+/* ========= CARRITO DE COMPRAS (CORREGIDO) ========= */
 
-export const getCarrito = () => api.get('/carrito/');
-export const addToCarrito = (data) => api.post('/carrito/', data);
-export const deleteItemCarrito = (id) => api.delete(`/carrito/${id}/`);
+// Obtener el carrito (GET /carritos/)
+export const getCarrito = () => api.get('/carritos/'); 
+
+// Agregar item (POST /carrito/agregar/)
+export const addToCarrito = (data) => api.post('/carrito/agregar/', data); 
+
+// Eliminar item (DELETE /items-carrito/{id}/)
+export const deleteItemCarrito = (id) => api.delete(`/items-carrito/${id}/`); 
+
+// Confirmar reserva (POST /carrito/confirmar/)
 export const confirmarCarrito = (data) => api.post('/carrito/confirmar/', data);

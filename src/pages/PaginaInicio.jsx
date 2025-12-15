@@ -99,6 +99,10 @@ export default function PaginaInicio() {
     }
   };
 
+// En src/pages/PaginaInicio.jsx:
+
+// ... (después de fetchCarritoCount, antes de handleLogout) ...
+
   const handleAddToCarrito = async (item, tipo) => {
     if (!token) {
       navigate('/login');
@@ -107,23 +111,32 @@ export default function PaginaInicio() {
 
     try {
       const data = {
-        tipo: tipo, // 'servicio', 'combo', 'promocion'
+        tipo: tipo,       // 'servicio', 'combo', 'promocion'
+        item_id: item.id, // El backend espera 'item_id', no 'servicio' o 'combo'
         cantidad: 1,
       };
       
-      if (tipo === 'servicio') data.servicio = item.id;
-      if (tipo === 'combo') data.combo = item.id;
-      if (tipo === 'promocion') data.promocion = item.id;
+      // 🚨 DEBUGGING: Revisa si el ID y tipo se envían correctamente
+      console.log('--- ENVIANDO A AGREGAR CARRITO ---');
+      console.log('Datos enviados:', data); 
 
-      await addToCarrito(data);
+      // La API es única para los 3 tipos de productos
+      await addToCarrito(data); 
+      
       setSnackbarMsg(`✅ ${item.nombre} agregado al carrito`);
       setSnackbarOpen(true);
       fetchCarritoCount(); // Actualizar contador
     } catch (err) {
-      setSnackbarMsg('⚠️ Error agregando al carrito (endpoint no implementado)');
-      setSnackbarOpen(true);
+        // Muestra el error de respuesta del servidor (cuerpo del 400 o 500)
+        const errorMsg = err.response?.data?.error || err.message;
+        console.error("Error al agregar al carrito:", errorMsg);
+        
+        setSnackbarMsg(`⚠️ Error: ${errorMsg}`);
+        setSnackbarOpen(true);
     }
   };
+  
+// ... (resto del componente) ...
 
   const handleLogout = () => {
     localStorage.removeItem('token');
