@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getReservas, deleteReserva } from '../apiService';
+import { getReservas, deleteReserva } from '../api';
 import {
   Container,
   Typography,

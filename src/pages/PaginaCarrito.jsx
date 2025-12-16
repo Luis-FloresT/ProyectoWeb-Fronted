@@ -23,7 +23,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EventIcon from '@mui/icons-material/Event';
-import { getCarrito, deleteItemCarrito, confirmarCarrito } from '../apiService';
+import { getCarrito, deleteItemCarrito, confirmarCarrito } from '../api';
 
 const theme = createTheme({
   palette: {

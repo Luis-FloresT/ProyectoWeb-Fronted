@@ -6,14 +6,12 @@ import {
   updateCancelacion,
   deleteCancelacion, 
   getReservas 
-} from '../apiService';
-
+} from '../api';
 import {
   Container,
   Typography,
   TextField,
   Button,
-  Box,
   Paper,
   List,
   ListItem,

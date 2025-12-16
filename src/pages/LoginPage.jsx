@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../apiService';
+import { AuthContext } from '../auth/AuthContext';
 
-function LoginPage({ onLogin }) {
+function LoginPage() {
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,26 +16,7 @@ function LoginPage({ onLogin }) {
     try {
       // IMPORTANTE: los nombres de campo deben coincidir con tu API de Django.
       // Si en Django usas "username" y "password", cambia aquí los nombres.
-      const res = await login({
-        usuario,
-        clave,
-      });
-      // Se asume que la API devuelve { id, token, is_admin, username }
-      const { id, token, is_admin, username } = res.data;
-
-      // Guardar datos en localStorage para que los use el interceptor de apiService.js
-      if (token) {
-        localStorage.setItem('token', token);
-      }
-      if (id) {
-        localStorage.setItem('id', String(id)); // ID del usuario
-      }
-      localStorage.setItem('is_admin', String(is_admin ?? false));
-      if (username) {
-        localStorage.setItem('username', username);
-      }
-
-      if (onLogin) onLogin();
+      await login({ usuario, clave });
 
       // Redirigir después de login
       navigate('/');

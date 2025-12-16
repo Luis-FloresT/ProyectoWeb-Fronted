@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { getServicios, getCombos, getPromociones, addToCarrito, getCarrito } from '../apiService';
+import { getServicios, getCombos, getPromociones, addToCarrito, getCarrito } from '../api';
+import { AuthContext } from '../auth/AuthContext';
 import {
   Container,
   Box,
@@ -52,8 +53,7 @@ const serviceColors = [
 
 export default function PaginaInicio() {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
-  const isAdmin = localStorage.getItem('is_admin') === 'true';
+  const { token, logout, isAdmin } = useContext(AuthContext);
   
   const [servicios, setServicios] = useState([]);
   const [combos, setCombos] = useState([]);
@@ -139,8 +139,7 @@ export default function PaginaInicio() {
 // ... (resto del componente) ...
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('is_admin');
+    logout();
     navigate('/login');
   };
 

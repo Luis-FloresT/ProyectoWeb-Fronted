@@ -15,7 +15,7 @@ import {
   getServicios,
   getPromociones,
   createReserva,
-} from "../apiService";
+} from "../api";
 
 const FUENTE = '"Comic Sans MS", "Trebuchet MS", cursive, sans-serif';
 
