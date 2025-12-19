@@ -137,6 +137,22 @@ function RegisterPage() {
               </svg>
             </div>
             <p style={styles.successText}>¡Registro completado!</p>
+            <div style={styles.verificationBox}>
+              <svg
+                style={styles.emailIcon}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              <p style={styles.verificationText}>Por favor, verifica tu cuenta</p>
+              <p style={styles.verificationSubtext}>
+                Hemos enviado un correo de verificación a tu email
+              </p>
+            </div>
             <p style={styles.successSubtext}>Redirigiendo al login...</p>
           </div>
         )}
@@ -297,6 +313,41 @@ const styles = {
     fontSize: '1rem',
     color: '#666',
     fontWeight: 500,
+    marginTop: 16,
+  },
+  verificationBox: {
+    background: 'linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(199, 36, 177, 0.1))',
+    padding: '24px 32px',
+    borderRadius: 16,
+    margin: '20px 0',
+    border: '2px solid rgba(199, 36, 177, 0.3)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '90%',
+  },
+  emailIcon: {
+    width: 48,
+    height: 48,
+    color: '#C724B1',
+    marginBottom: 12,
+  },
+  verificationText: {
+    fontSize: '1.4rem',
+    fontWeight: 700,
+    background: 'linear-gradient(135deg, #FF6B35, #C724B1)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    margin: '8px 0',
+    textAlign: 'center',
+  },
+  verificationSubtext: {
+    fontSize: '0.95rem',
+    color: '#555',
+    fontWeight: 500,
+    textAlign: 'center',
+    marginTop: 4,
   }
 };
 
