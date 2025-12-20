@@ -8,6 +8,8 @@ import { theme } from '../theme/theme';
 import Header from '../components/layout/Header';
 import ProductSection from '../components/ProductSection';
 
+
+
 export default function PaginaInicio() {
   const navigate = useNavigate();
   const { token, logout, isAdmin } = useContext(AuthContext);
@@ -99,6 +101,24 @@ export default function PaginaInicio() {
     }
   };
 
+  const footerHoverStyle = {
+  marginBottom: "8px",
+  color: "#555",
+  cursor: "pointer",
+  padding: "6px 10px",
+  borderRadius: "8px",
+  width: "fit-content",
+  transition: "all 0.25s ease",
+
+  "&:hover": {
+    color: "#FF6B9D",
+    backgroundColor: "#ffe6f0",
+    transform: "scale(1.08)",
+    boxShadow: "0 4px 10px rgba(255,107,157,0.3)",
+  },
+};
+
+
   return (
     <ThemeProvider theme={theme}>
       <div style={{
@@ -187,22 +207,172 @@ export default function PaginaInicio() {
           onAddToCarrito={handleAddToCarrito}
         />
 
-        {/* Footer */}
-        <Box sx={{
-          background: "linear-gradient(90deg, #FF6B9D 0%, #FFC74F 100%)",
-          color: "#fff",
-          textAlign: "center",
-          padding: "30px",
-          marginTop: "40px",
-          boxShadow: "0 -8px 32px rgba(0,0,0,0.1)",
-        }}>
-          <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-            🎉 BURBUJITAS DE COLORES 🎉
-          </Typography>
-          <Typography variant="body2" sx={{ opacity: 0.9 }}>
-            Haz que tu fiesta sea inolvidable • Diversión garantizada • ¡Contacta con nosotros!
-          </Typography>
-        </Box>
+       {/* Footer */}
+<Box
+  sx={{
+    background: "#a9e2f3ff",
+    padding: { xs: "40px 20px", md: "60px 80px" },
+    marginTop: "80px",
+  }}
+>
+  <Box
+    sx={{
+      display: "grid",
+      gridTemplateColumns: { xs: "1fr", md: "2fr 1fr 1fr 1fr" },
+      gap: "40px",
+    }}
+  >
+    {/* Columna 1 */}
+<Box>
+  {/* SOLO EL NOMBRE CON HOVER */}
+  <Box
+    sx={{
+      display: "inline-block",
+      cursor: "pointer",
+      transition: "all 0.3s ease",
+      "&:hover": {
+        transform: "scale(1.05)",
+        filter: "drop-shadow(0px 6px 12px rgba(0,0,0,0.25))",
+      },
+    }}
+  >
+    <Typography
+      variant="h4"
+      sx={{
+        fontWeight: "bold",
+        color: "#FF6B9D",
+        transition: "color 0.3s ease",
+        "&:hover": {
+          color: "#ff4f8b",
+        },
+      }}
+    >
+      BURBUJITAS
+    </Typography>
+
+    <Typography
+      variant="h5"
+      sx={{
+        fontWeight: "bold",
+        color: "#FFC74F",
+        transition: "color 0.3s ease",
+        "&:hover": {
+          color: "#ffb703",
+        },
+      }}
+    >
+      DE COLORES
+    </Typography>
+  </Box>
+
+  {/* TEXTO NORMAL (SIN HOVER) */}
+  <Typography variant="body2" sx={{ color: "#555", marginTop: "10px" }}>
+    Tu fiesta perfecta empieza aquí
+  </Typography>
+
+  <Typography variant="body2" sx={{ color: "#777" }}>
+    © 2025 BURBUJITAS DE COLORES
+  </Typography>
+</Box>
+
+   {/* Columna 2 */}
+<Box>
+  <Typography sx={{ fontWeight: "bold", marginBottom: "15px" }}>
+    BURBUJITAS
+  </Typography>
+
+  {[
+    { text: "¿Quiénes somos?", path: "/quienes-somos" },
+    { text: "Sobre nosotros", path: "/quienes-somos" },
+    { text: "Ingresar", path: "/login" },
+    { text: "Términos y condiciones", path: "/terminos" },
+    { text: "Política de privacidad", path: "/privacidad" },
+    { text: "Contacto", path: "/contacto" },
+  ].map((item) => (
+    <Typography
+      key={item.text}
+      sx={footerHoverStyle}
+      onClick={() => navigate(item.path)}
+    >
+      {item.text}
+    </Typography>
+  ))}
+</Box>
+
+
+    {/* Columna 3 */}
+<Box>
+  <Typography sx={{ fontWeight: "bold", marginBottom: "15px" }}>
+    Servicios
+  </Typography>
+
+  {[
+    { text: "Solicitar servicio", path: "/solicitar-servicio" },
+    { text: "Arma tu fiesta", path: "/arma-tu-fiesta" },
+    { text: "Ofertas", path: "/ofertas" },
+    { text: "Quiero ser proveedor", path: "/proveedor" },
+  ].map((item) => (
+    <Typography
+      key={item.text}
+      sx={footerHoverStyle}
+      onClick={() => navigate(item.path)}
+    >
+      {item.text}
+    </Typography>
+  ))}
+</Box>
+
+
+    {/* Columna 4 */}
+    <Box>
+      <Typography sx={{ fontWeight: "bold", marginBottom: "15px" }}>
+        Redes Sociales
+      </Typography>
+
+      <Box sx={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
+        {["f", "🎵", "📸", "▶️"].map((icon, i) => (
+          <Box
+            key={i}
+            sx={{
+              width: 36,
+              height: 36,
+              borderRadius: "50%",
+              background: "#FF6B9D",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontWeight: "bold",
+              cursor: "pointer",
+              transition: "all 0.25s ease",
+
+              "&:hover": {
+                transform: "scale(1.2)",
+                boxShadow: "0 6px 14px rgba(0,0,0,0.25)",
+              },
+            }}
+          >
+            {icon}
+          </Box>
+        ))}
+      </Box>
+
+      <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
+        Contacto
+      </Typography>
+
+      <Typography >
+        info@burbujitasdecolores.com
+      </Typography>
+
+      <Typography >
+        WhatsApp: +593 91362088
+      </Typography>
+    </Box>
+  </Box>
+</Box>
+
+
 
         {/* Snackbar para notificaciones */}
         <Snackbar
