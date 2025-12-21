@@ -27,7 +27,8 @@ body, #root, html {
   padding: 0;
   min-height: 100vh;
   box-sizing: border-box;
-  background: none;
+  /* Forzamos fondo claro para evitar bandas oscuras */
+  background-color: #ffffff !important;
 }
 
 h1 {

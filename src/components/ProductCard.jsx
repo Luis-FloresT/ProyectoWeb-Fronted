@@ -149,7 +149,7 @@ export default function ProductCard({ item, tipo, index, onReservar, onAddToCarr
               background: "linear-gradient(135deg, #FF8C94 0%, #FF6B9D 100%)",
             },
           }}
-          onClick={() => onReservar()}
+          onClick={() => onReservar(item, tipo)}
         >
           🎯 {tipo === 'promocion' ? 'Aprovechar Ahora' : tipo === 'combo' ? 'Reservar Combo' : 'Reservar'}
         </Button>

@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../theme/theme';
 import Header from '../components/layout/Header';
 import ProductSection from '../components/ProductSection';
+import ReservaModal from '../components/ReservaModal';
 
 export default function PaginaInicio() {
   const navigate = useNavigate();
@@ -20,6 +21,11 @@ export default function PaginaInicio() {
   const [carritoCount, setCarritoCount] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState('');
+
+  // Estado para el modal de reserva
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedTipo, setSelectedTipo] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,12 +97,22 @@ export default function PaginaInicio() {
     navigate('/login');
   };
 
-  const handleReservar = () => {
+  const handleReservar = (item, tipo) => {
     if (!token) {
       navigate('/login');
-    } else {
-      navigate('/reservas/nueva');
+      return;
     }
+    
+    // Abrir modal con el item seleccionado
+    setSelectedItem(item);
+    setSelectedTipo(tipo);
+    setModalOpen(true);
+  };
+
+  const handleReservaCreada = (codigo) => {
+    setModalOpen(false); // CERRAR MODAL
+    setSnackbarMsg(`✅ Reserva creada exitosamente`);
+    setSnackbarOpen(true);
   };
 
   return (
@@ -198,6 +214,15 @@ export default function PaginaInicio() {
         }}>
           <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "10px" }}>
             🎉 BURBUJITAS DE COLORES 🎉
+
+        {/* Modal de Reserva */}
+        <ReservaModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          item={selectedItem}
+          tipo={selectedTipo}
+          onReservaCreada={handleReservaCreada}
+        />
           </Typography>
           <Typography variant="body2" sx={{ opacity: 0.9 }}>
             Haz que tu fiesta sea inolvidable • Diversión garantizada • ¡Contacta con nosotros!

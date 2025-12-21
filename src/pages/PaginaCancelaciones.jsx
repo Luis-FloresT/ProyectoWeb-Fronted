@@ -10,21 +10,21 @@ import {
 import {
   Container,
   Typography,
-  TextField,
   Button,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
+  Box,
   Alert,
-  Divider,
   Grid,
-  Select,
-  MenuItem,
+  Paper,
+  Divider,
+  CircularProgress,
+  TextField,
   FormControl,
   InputLabel,
-  IconButton
+  Select,
+  MenuItem,
+  List,
+  ListItem,
+  IconButton,
 } from '@mui/material';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import EditIcon from '@mui/icons-material/Edit';
@@ -140,14 +140,8 @@ function PaginaCancelaciones() {
   return (
     <Box sx={{
       minHeight: '100vh',
-      width: '100vw',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      width: '100%',
       background: '#fff9e6',
-      overflow: 'auto',
       py: 4,
     }}>
       <Container maxWidth="md">
@@ -241,23 +235,20 @@ function PaginaCancelaciones() {
           <List>
             {cancelaciones.map((canc, index) => (
               <React.Fragment key={canc.id}>
-                <ListItem
-                   secondaryAction={
-                    <Box>
-                      <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(canc)}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteClick(canc.id)} sx={{ ml: 1 }}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  }
-                >
+                <ListItem>
                   <EventBusyIcon sx={{ mr: 2 }} />
-                  <ListItemText
-                    primary={`Reserva ID: ${canc.reserva}`}
-                    secondary={`Motivo: ${canc.motivo} | Reembolso: $${canc.reembolso_aplicado}`}
-                  />
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="subtitle1">{`Reserva ID: ${canc.reserva}`}</Typography>
+                    <Typography variant="body2" color="text.secondary">{`Motivo: ${canc.motivo} | Reembolso: $${canc.reembolso_aplicado}`}</Typography>
+                  </Box>
+                  <Box>
+                    <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(canc)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteClick(canc.id)} sx={{ ml: 1 }}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
                 </ListItem>
                 {index < cancelaciones.length - 1 && <Divider component="li" />}
               </React.Fragment>

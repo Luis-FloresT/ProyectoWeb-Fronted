@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Grid, Box, CircularProgress } from '@mui/material';
+import { Container, Typography, Box, CircularProgress } from '@mui/material';
 import ProductCard from './ProductCard';
 
 export default function ProductSection({ 
@@ -33,9 +33,17 @@ export default function ProductSection({
       )}
 
       {items.length > 0 && (
-        <Grid container spacing={3}>
+        <Box sx={{ 
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)'
+          },
+          gap: 3
+        }}>
           {items.map((item, index) => (
-            <Grid item xs={12} sm={6} md={4} key={item.id}>
+            <Box key={item.id}>
               <ProductCard
                 item={item}
                 tipo={tipo}
@@ -43,9 +51,9 @@ export default function ProductSection({
                 onReservar={onReservar}
                 onAddToCarrito={onAddToCarrito}
               />
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       )}
 
       {items.length === 0 && !loading && (

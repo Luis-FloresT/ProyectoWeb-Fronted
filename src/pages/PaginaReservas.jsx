@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getReservas, deleteReserva } from '../api';
 import {
   Container,
@@ -12,12 +12,10 @@ import {
   Paper,
   List,
   ListItem,
-  ListItemText,
   Divider,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
 import { theme } from '../theme/theme';
 import PageContainer from '../components/layout/PageContainer';
 import BackButton from '../components/BackButton';
@@ -26,23 +24,30 @@ import EmptyState from '../components/EmptyState';
 
 function PaginaReservas() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const userId = localStorage.getItem('id');
+  const clienteId = localStorage.getItem('cliente_id') || localStorage.getItem('id');
 
   useEffect(() => {
     fetchReservas();
-  }, []);
+  }, [location]); // Recargar cuando cambie la ubicación (navegación)
 
   const fetchReservas = async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await getReservas();
-      const misReservas = res.data.filter(r => r.cliente == userId);
+      
+      // Filtrar por cliente
+      const misReservas = res.data.filter(r => {
+        return String(r.cliente) === String(clienteId);
+      });
+      
       setReservas(misReservas);
     } catch (err) {
+      console.error('Error cargando reservas:', err);
       setError('Error cargando reservas: ' + err.message);
     } finally {
       setLoading(false);
@@ -68,31 +73,32 @@ function PaginaReservas() {
     }
   };
 
+  const formatFechaEvento = (fecha) => {
+    if (!fecha) return '—';
+    const d = new Date(fecha);
+    if (isNaN(d.getTime())) {
+       // Fallback: intentar formato YYYY-MM-DD
+       try {
+         const fallback = new Date(`${fecha}T00:00:00`);
+         return isNaN(fallback.getTime()) ? String(fecha) : fallback.toLocaleDateString();
+       } catch {
+         return String(fecha);
+       }
+    }
+    try {
+      return d.toLocaleDateString();
+    } catch {
+      return String(fecha);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <PageContainer>
         <Container maxWidth="lg" sx={{ py: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
             <BackButton />
-          
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => navigate('/reservas/nueva')}
-            sx={{
-              background: 'linear-gradient(135deg, #FF6B9D 0%, #FF8C94 100%)',
-              color: '#fff',
-              fontWeight: 'bold',
-              borderRadius: '25px',
-              px: 3,
-              '&:hover': {
-                background: 'linear-gradient(135deg, #FF8C94 0%, #FF6B9D 100%)',
-              }
-            }}
-          >
-            Nueva Reserva
-          </Button>
-        </Box>
+          </Box>
 
         <Typography variant="h4" sx={{ 
           color: '#FF6B9D', 
@@ -138,46 +144,43 @@ function PaginaReservas() {
                     sx={{
                       py: 2,
                       px: 3,
-                      '&:hover': { background: 'rgba(255, 107, 157, 0.05)' }
+                      '&:hover': { background: 'rgba(255, 107, 157, 0.05)' },
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
                     }}
-                    secondaryAction={
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, width: '100%' }}>
+                      <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF6B9D' }}>
+                        Reserva #{reserva.codigo_reserva}
+                      </Typography>
+                      <Chip 
+                        label={reserva.estado} 
+                        color={getEstadoColor(reserva.estado)}
+                        size="small"
+                        sx={{ fontWeight: 'bold' }}
+                      />
+                      <Box sx={{ flex: 1 }} />
                       <IconButton
                         edge="end"
                         onClick={() => handleDelete(reserva.id)}
                         sx={{ color: '#FF6348' }}
+                        aria-label="Eliminar"
                       >
                         <DeleteIcon />
                       </IconButton>
-                    }
-                  >
-                    <ListItemText
-                      primary={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF6B9D' }}>
-                            Reserva #{reserva.codigo_reserva}
-                          </Typography>
-                          <Chip 
-                            label={reserva.estado} 
-                            color={getEstadoColor(reserva.estado)}
-                            size="small"
-                            sx={{ fontWeight: 'bold' }}
-                          />
-                        </Box>
-                      }
-                      secondary={
-                        <Box sx={{ mt: 1 }}>
-                          <Typography variant="body2" color="textSecondary">
-                            📍 {reserva.direccion_evento}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            📅 Evento: {new Date(reserva.fecha_evento).toLocaleDateString()}
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: '#FFC74F', fontWeight: 'bold', mt: 1 }}>
-                            💰 Total: ${reserva.total}
-                          </Typography>
-                        </Box>
-                      }
-                    />
+                    </Box>
+                    <Box sx={{ width: '100%' }}>
+                      <Typography variant="body2" color="textSecondary">
+                        📍 {reserva.direccion_evento}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        📅 Evento: {formatFechaEvento(reserva.fecha_evento)}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: '#FFC74F', fontWeight: 'bold', mt: 1 }}>
+                        💰 Total: ${reserva.total}
+                      </Typography>
+                    </Box>
                   </ListItem>
                   {index < reservas.length - 1 && <Divider component="li" />}
                 </React.Fragment>

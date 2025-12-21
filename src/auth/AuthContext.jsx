@@ -25,12 +25,13 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async ({ usuario, clave }) => {
     const res = await apiLogin({ usuario, clave });
-    const { id, token: tk, is_admin, username } = res.data;
+    const { id, cliente_id, token: tk, is_admin, username } = res.data;
     if (tk) {
       localStorage.setItem('token', tk);
       setToken(tk);
     }
     if (id) localStorage.setItem('id', String(id));
+    if (cliente_id) localStorage.setItem('cliente_id', String(cliente_id));
     localStorage.setItem('is_admin', String(is_admin ?? false));
     setIsAdmin(Boolean(is_admin));
     if (username) localStorage.setItem('username', username);
@@ -40,6 +41,7 @@ export function AuthProvider({ children }) {
   const logout = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('id');
+    localStorage.removeItem('cliente_id');
     localStorage.removeItem('is_admin');
     localStorage.removeItem('username');
     setToken(null);

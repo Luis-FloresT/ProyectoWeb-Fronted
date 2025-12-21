@@ -10,21 +10,21 @@ import {
 import {
   Container,
   Typography,
-  TextField,
   Button,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
+  Box,
   Alert,
-  Divider,
   Grid,
-  Select,
-  MenuItem,
+  Paper,
+  Divider,
+  CircularProgress,
+  TextField,
   FormControl,
   InputLabel,
-  IconButton
+  Select,
+  MenuItem,
+  List,
+  ListItem,
+  IconButton,
 } from '@mui/material';
 import PaymentIcon from '@mui/icons-material/Payment';
 import EditIcon from '@mui/icons-material/Edit';
@@ -136,14 +136,8 @@ function PaginaPagos() {
   return (
     <Box sx={{
       minHeight: '100vh',
-      width: '100vw',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      width: '100%',
       background: '#fff9e6',
-      overflow: 'auto',
       py: 4,
     }}>
       <Container maxWidth="md">
@@ -241,23 +235,20 @@ function PaginaPagos() {
           <List>
             {pagos.map((pago, index) => (
               <React.Fragment key={pago.id}>
-                <ListItem
-                  secondaryAction={
-                    <Box>
-                      <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(pago)}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteClick(pago.id)} sx={{ ml: 1 }}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  }
-                >
+                <ListItem>
                   <PaymentIcon sx={{ mr: 2 }} />
-                  <ListItemText
-                    primary={`Pago ID: ${pago.id} (Reserva ID: ${pago.reserva})`}
-                    secondary={`$${pago.monto} - ${pago.metodo_pago} [${pago.estado_pago}]`}
-                  />
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="subtitle1">{`Pago ID: ${pago.id} (Reserva ID: ${pago.reserva})`}</Typography>
+                    <Typography variant="body2" color="text.secondary">{`$${pago.monto} - ${pago.metodo_pago} [${pago.estado_pago}]`}</Typography>
+                  </Box>
+                  <Box>
+                    <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(pago)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteClick(pago.id)} sx={{ ml: 1 }}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
                 </ListItem>
                 {index < pagos.length - 1 && <Divider component="li" />}
               </React.Fragment>

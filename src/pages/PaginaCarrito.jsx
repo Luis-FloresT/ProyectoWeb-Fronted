@@ -10,32 +10,25 @@ import {
   IconButton,
   Divider,
   Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
   Chip,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import EventIcon from '@mui/icons-material/Event';
-import { getCarrito, deleteItemCarrito, confirmarCarrito } from '../api';
+import { getCarrito, deleteItemCarrito } from '../api';
 import { theme } from '../theme/theme';
 import PageContainer from '../components/layout/PageContainer';
 import BackButton from '../components/BackButton';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
+import ReservaModal from '../components/ReservaModal';
 
 function PaginaCarrito() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [fechaReserva, setFechaReserva] = useState('');
-  const [direccion, setDireccion] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     fetchCarrito();
@@ -73,25 +66,17 @@ function PaginaCarrito() {
     }, 0);
   };
 
-  const handleConfirmar = async () => {
-    if (!fechaReserva || !direccion) {
-      alert('Por favor completa la fecha y la dirección');
-      return;
-    }
+  const handleReservaCreada = (codigo) => {
+    setModalOpen(false); // CERRAR MODAL
+    alert(`✅ Reserva creada exitosamente`);
+  };
 
-    try {
-      const response = await confirmarCarrito({
-        fecha_evento: fechaReserva,
-        direccion_evento: direccion,
-      });
-      
-      alert(`¡Reserva confirmada! Tu código es: ${response.data.codigo}`);
-      setOpenDialog(false);
-      navigate('/reservas');
-    } catch (err) {
-      const msg = err.response?.data?.error || 'Error al confirmar la reserva';
-      alert('⚠️ ' + msg);
-    }
+  // Crear un objeto "carrito" para pasar al modal
+  const carritoItem = {
+    id: 'carrito',
+    nombre: `Carrito (${items.length} ${items.length === 1 ? 'item' : 'items'})`,
+    descripcion: `Total: $${calcularTotal().toFixed(2)}`,
+    precio_base: calcularTotal(),
   };
 
   return (
@@ -141,7 +126,7 @@ function PaginaCarrito() {
                     fontSize: '1.1rem',
                     px: 4,
                     py: 1.5,
-                    borderRadius: '12px',
+                    borderRadius: '25px',
                   }}
                 >
                   Ver Servicios
@@ -152,6 +137,7 @@ function PaginaCarrito() {
 
           {!loading && items.length > 0 && (
             <Box>
+              {/* Lista de items */}
               {items.map((item) => (
                 <Card key={item.id} sx={{
                   mb: 2,
@@ -167,12 +153,12 @@ function PaginaCarrito() {
                           {item.nombre_producto}
                         </Typography>
                         <Box sx={{ display: 'flex', gap: 2, color: '#666', fontSize: '0.9rem' }}>
-                          <span>Precio unitario: ${parseFloat(item.precio_unitario).toFixed(2)}</span>
+                          <span>Precio: ${parseFloat(item.precio_unitario).toFixed(2)}</span>
                           <span>Cantidad: x{item.cantidad}</span>
                         </Box>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                        <Typography variant="h5" sx={{ color: '#FFC74F', fontWeight: 'bold' }}>
+                        <Typography variant="h5" sx={{ color: '#FFC74F', fontWeight: 'bold', minWidth: '80px', textAlign: 'right' }}>
                           ${parseFloat(item.subtotal).toFixed(2)}
                         </Typography>
                         <IconButton 
@@ -193,6 +179,7 @@ function PaginaCarrito() {
 
               <Divider sx={{ my: 3 }} />
 
+              {/* Resumen */}
               <Box sx={{ 
                 background: 'linear-gradient(135deg, #FFE6F0 0%, #FFF9E6 100%)',
                 borderRadius: '15px',
@@ -200,92 +187,52 @@ function PaginaCarrito() {
                 mb: 3,
                 boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
               }}>
-                <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FF6B9D', mb: 2 }}>
-                  Resumen del Carrito
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#FF6B9D', mb: 2 }}>
+                  💰 Resumen del Carrito
                 </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography variant="h6">Items totales:</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{items.length}</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, borderBottom: '1px solid #FFD3E2', pb: 1 }}>
+                  <Typography variant="body1" sx={{ color: '#666' }}>Items totales:</Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#333' }}>{items.length}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="h4" sx={{ fontWeight: 'bold' }}>Total a Pagar:</Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FFC74F' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FF6B9D' }}>Total a Pagar:</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#FFC74F' }}>
                     ${calcularTotal().toFixed(2)}
                   </Typography>
                 </Box>
               </Box>
 
+              {/* Botón para abrir modal */}
               <Button
                 fullWidth
                 variant="contained"
-                startIcon={<EventIcon />}
-                onClick={() => setOpenDialog(true)}
+                onClick={() => setModalOpen(true)}
                 sx={{
                   background: 'linear-gradient(135deg, #FF6B9D 0%, #FF8C94 100%)',
                   color: '#fff',
-                  fontWeight: 700,
-                  fontSize: '1.2rem',
-                  py: 2,
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 15px rgba(255, 107, 157, 0.3)',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                  py: 1.5,
+                  borderRadius: '25px',
                   '&:hover': {
                     background: 'linear-gradient(135deg, #FF8C94 0%, #FF6B9D 100%)',
+                    boxShadow: '0 8px 24px rgba(255, 107, 157, 0.4)',
                   },
                 }}
               >
-                Confirmar Reserva
+                📅 Confirmar Reserva
               </Button>
             </Box>
           )}
 
-          <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
-            <DialogTitle sx={{ fontWeight: 'bold', color: '#FF6B9D', textAlign: 'center', fontSize: '1.5rem' }}>
-              Confirmar Evento
-            </DialogTitle>
-            <DialogContent>
-              <Typography variant="body1" sx={{ mb: 3, color: '#666', textAlign: 'center' }}>
-                Estás a un paso de tener la mejor fiesta. <br/> Por favor dinos cuándo y dónde.
-              </Typography>
-              <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
-                <TextField
-                  fullWidth
-                  label="Fecha del Evento"
-                  type="date"
-                  value={fechaReserva}
-                  onChange={(e) => setFechaReserva(e.target.value)}
-                  InputLabelProps={{ shrink: true }}
-                  required
-                />
-                <TextField
-                  fullWidth
-                  label="Dirección completa del Evento"
-                  value={direccion}
-                  onChange={(e) => setDireccion(e.target.value)}
-                  multiline
-                  rows={3}
-                  placeholder="Calle, número, referencia..."
-                  required
-                />
-              </Box>
-            </DialogContent>
-            <DialogActions sx={{ p: 3, justifyContent: 'space-between' }}>
-              <Button onClick={() => setOpenDialog(false)} color="inherit">
-                Cancelar
-              </Button>
-              <Button 
-                onClick={handleConfirmar}
-                variant="contained"
-                size="large"
-                sx={{
-                  background: 'linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%)',
-                  color: 'white',
-                  fontWeight: 'bold'
-                }}
-              >
-                ¡Finalizar Reserva!
-              </Button>
-            </DialogActions>
-          </Dialog>
+          {/* Modal de Reserva */}
+          <ReservaModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            item={carritoItem}
+            tipo="servicio"
+            onReservaCreada={handleReservaCreada}
+          />
         </Container>
       </PageContainer>
     </ThemeProvider>
