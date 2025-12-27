@@ -34,13 +34,12 @@ import { getReserva, checkoutPago, getBancos } from '../api/reservas';
 // --- UTILIDADES DE LOGOS BANCARIOS ---
 const getBankLogo = (bankName) => {
     const name = bankName.toLowerCase();
-    if (name.includes('pichincha')) return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjKAQpynPPXHpSjfBEJSvqxeA3Z06tSabtAw&s'; // URL Actualizada
-    if (name.includes('guayaquil')) return 'https://play-lh.googleusercontent.com/4A7fREJ2S-XLcgvwPDd8jVQCODSz0mSgzJLCbVU_62jKeDWkaGytvMSFWVE_dDovOKnt'; // URL Actualizada
+    if (name.includes('pichincha')) return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjKAQpynPPXHpSjfBEJSvqxeA3Z06tSabtAw&s';
+    if (name.includes('guayaquil')) return 'https://play-lh.googleusercontent.com/4A7fREJ2S-XLcgvwPDd8jVQCODSz0mSgzJLCbVU_62jKeDWkaGytvMSFWVE_dDovOKnt';
     if (name.includes('produbanco')) return 'https://logovector.net/wp-content/uploads/2014/11/178553-produbanco-logo-vector.png';
     if (name.includes('pacifico')) return 'https://logovtor.com/wp-content/uploads/2019/11/banco-del-pacifico-logo-vector.png';
     return null; // Fallback
 };
-
 
 function PaginaConfirmacion() {
     const { id } = useParams();
@@ -129,8 +128,10 @@ function PaginaConfirmacion() {
                 <Container maxWidth="lg" sx={{ py: 6 }}>
                     {/* Cabecera Premium */}
                     <Box sx={{ textAlign: 'center', mb: 6 }}>
-                        <CheckCircleOutlineIcon sx={{ fontSize: 90, color: '#4CAF50', filter: 'drop-shadow(0 4px 10px rgba(76, 175, 80, 0.3))', mb: 2 }} />
-                        <Typography variant="h2" sx={{ fontWeight: 900, color: '#FF6B9D', mb: 1, letterSpacing: '-1px' }}>
+                        {/* Icono reducido para mantener proporción con el nuevo título */}
+                        <CheckCircleOutlineIcon sx={{ fontSize: 60, color: '#4CAF50', filter: 'drop-shadow(0 4px 10px rgba(76, 175, 80, 0.3))', mb: 2 }} />
+                        {/* Título ajustado a h4 (más pequeño) */}
+                        <Typography variant="h4" sx={{ fontWeight: 900, color: '#FF6B9D', mb: 1, letterSpacing: '-1px' }}>
                             ¡Casi Listos!
                         </Typography>
                         <Typography variant="h6" sx={{ color: '#666', fontWeight: 500 }}>
@@ -171,6 +172,7 @@ function PaginaConfirmacion() {
                                         </Box>
                                     </Box>
 
+                                    {/* Información del evento */}
                                     <Grid container spacing={3} sx={{ mb: 4 }}>
                                         <Grid item xs={12}>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -209,6 +211,7 @@ function PaginaConfirmacion() {
                                         </Grid>
                                     </Grid>
 
+                                    {/* Detalle del pedido */}
                                     <Typography variant="h6" sx={{ fontWeight: 800, mb: 2, display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                         <ShoppingBagIcon sx={{ color: '#FFB800' }} /> Tu Pedido
                                     </Typography>
@@ -226,6 +229,7 @@ function PaginaConfirmacion() {
                                         ))}
                                     </Box>
 
+                                    {/* Resumen de precios */}
                                     <Box sx={{ mt: 3, p: 3, bgcolor: '#FFF9FB', borderRadius: '20px', border: '2px dashed #FFE3ED' }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
                                             <Typography variant="body1" sx={{ color: '#666', fontWeight: 600 }}>Subtotal</Typography>
@@ -246,6 +250,7 @@ function PaginaConfirmacion() {
                                         </Box>
                                     </Box>
 
+                                    {/* Mensaje de pago verificado */}
                                     {reserva.estado === 'APROBADA' && (
                                         <Alert
                                             icon={false}
@@ -266,162 +271,162 @@ function PaginaConfirmacion() {
                             </Card>
                         </Grid>
 
-                        {/* COLUMNA DERECHA: Instrucciones de Pago (Ocultar si ya está aprobado) */}
+                        {/* COLUMNA DERECHA: Instrucciones de Pago */}
                         {reserva.estado !== 'APROBADA' && (
                             <Grid item xs={12} md={6}>
-                                {reserva.estado !== 'APROBADA' && (
-                                    <Box>
-                                        <Typography variant="h4" sx={{ fontWeight: 900, mb: 4, color: '#333', textAlign: { xs: 'center', md: 'left' } }}>
-                                            💳 Paso Final: Pago
-                                        </Typography>
+                                <Box>
+                                    <Typography variant="h4" sx={{ fontWeight: 900, mb: 4, color: '#333', textAlign: { xs: 'center', md: 'left' } }}>
+                                        💳 Paso Final: Pago
+                                    </Typography>
 
-                                        {isTransferencia ? (
-                                            <Box>
-                                                <Grid container spacing={2}>
-                                                    {bancos.map((banco) => (
-                                                        <Grid item xs={12} sm={6} key={banco.id}>
-                                                            <Card sx={{
-                                                                borderRadius: '24px',
-                                                                border: '1px solid #FFE3ED',
-                                                                boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
-                                                                height: '100%',
-                                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                                '&:hover': {
-                                                                    transform: 'translateY(-5px)',
-                                                                    boxShadow: '0 20px 40px rgba(255, 107, 157, 0.12)',
-                                                                    borderColor: '#FF6B9D'
-                                                                }
-                                                            }}>
-                                                                <CardContent sx={{ p: 2.5 }}>
-                                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-                                                                        <Avatar
-                                                                            src={getBankLogo(banco.banco_nombre)}
+                                    {isTransferencia ? (
+                                        <Box>
+                                            <Grid container spacing={2}>
+                                                {bancos.map((banco) => (
+                                                    <Grid item xs={12} sm={6} key={banco.id}>
+                                                        <Card sx={{
+                                                            borderRadius: '24px',
+                                                            border: '1px solid #FFE3ED',
+                                                            boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
+                                                            height: '100%',
+                                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                            '&:hover': {
+                                                                transform: 'translateY(-5px)',
+                                                                boxShadow: '0 20px 40px rgba(255, 107, 157, 0.12)',
+                                                                borderColor: '#FF6B9D'
+                                                            }
+                                                        }}>
+                                                            <CardContent sx={{ p: 2.5 }}>
+                                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                                                                    <Avatar
+                                                                        src={getBankLogo(banco.banco_nombre)}
+                                                                        sx={{
+                                                                            width: 44,
+                                                                            height: 44,
+                                                                            bgcolor: '#fff',
+                                                                            border: '1.5px solid #f0f0f0',
+                                                                            p: 1
+                                                                        }}
+                                                                    >
+                                                                        <AccountBalanceIcon color="action" fontSize="small" />
+                                                                    </Avatar>
+                                                                    <Box>
+                                                                        <Typography variant="subtitle1" sx={{ fontWeight: 900, color: '#333', mb: -0.5, fontSize: '0.95rem', textTransform: 'capitalize' }}>
+                                                                            {banco.banco_nombre}
+                                                                        </Typography>
+                                                                        <Typography variant="caption" sx={{ color: '#888', fontWeight: 600 }}>
+                                                                            {banco.ruc}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                </Box>
+
+                                                                <Box sx={{
+                                                                    p: 1.5,
+                                                                    bgcolor: '#fcfcfc',
+                                                                    borderRadius: '16px',
+                                                                    border: '1px solid #eee',
+                                                                    display: 'flex',
+                                                                    justifyContent: 'space-between',
+                                                                    alignItems: 'center'
+                                                                }}>
+                                                                    <Box>
+                                                                        <Typography variant="caption" sx={{ color: '#999', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.65rem' }}>
+                                                                            {banco.tipo_cuenta}
+                                                                        </Typography>
+                                                                        <Typography variant="h6" sx={{ fontWeight: 900, color: '#FF6B9D', letterSpacing: '0.5px', fontSize: '1.1rem' }}>
+                                                                            {banco.numero_cuenta}
+                                                                        </Typography>
+                                                                    </Box>
+                                                                    <Tooltip title="Copiar" arrow>
+                                                                        <IconButton
+                                                                            size="small"
+                                                                            onClick={() => handleCopy(banco.numero_cuenta)}
                                                                             sx={{
-                                                                                width: 44,
-                                                                                height: 44,
-                                                                                bgcolor: '#fff',
-                                                                                border: '1.5px solid #f0f0f0',
-                                                                                p: 1
+                                                                                bgcolor: alpha('#FFB800', 0.1),
+                                                                                color: '#FFB800',
+                                                                                '&:hover': { bgcolor: '#FFB800', color: '#fff' }
                                                                             }}
                                                                         >
-                                                                            <AccountBalanceIcon color="action" fontSize="small" />
-                                                                        </Avatar>
-                                                                        <Box>
-                                                                            <Typography variant="subtitle1" sx={{ fontWeight: 900, color: '#333', mb: -0.5, fontSize: '0.95rem', textTransform: 'capitalize' }}>
-                                                                                {banco.banco_nombre}
-                                                                            </Typography>
-                                                                            <Typography variant="caption" sx={{ color: '#888', fontWeight: 600 }}>
-                                                                                {banco.ruc}
-                                                                            </Typography>
-                                                                        </Box>
-                                                                    </Box>
+                                                                            <ContentCopyIcon fontSize="small" />
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                </Box>
 
-                                                                    <Box sx={{
-                                                                        p: 1.5,
-                                                                        bgcolor: '#fcfcfc',
-                                                                        borderRadius: '16px',
-                                                                        border: '1px solid #eee',
-                                                                        display: 'flex',
-                                                                        justifyContent: 'space-between',
-                                                                        alignItems: 'center'
-                                                                    }}>
-                                                                        <Box>
-                                                                            <Typography variant="caption" sx={{ color: '#999', fontWeight: 700, textTransform: 'uppercase', fontSize: '0.65rem' }}>
-                                                                                {banco.tipo_cuenta}
-                                                                            </Typography>
-                                                                            <Typography variant="h6" sx={{ fontWeight: 900, color: '#FF6B9D', letterSpacing: '0.5px', fontSize: '1.1rem' }}>
-                                                                                {banco.numero_cuenta}
-                                                                            </Typography>
-                                                                        </Box>
-                                                                        <Tooltip title="Copiar" arrow>
-                                                                            <IconButton
-                                                                                size="small"
-                                                                                onClick={() => handleCopy(banco.numero_cuenta)}
-                                                                                sx={{
-                                                                                    bgcolor: alpha('#FFB800', 0.1),
-                                                                                    color: '#FFB800',
-                                                                                    '&:hover': { bgcolor: '#FFB800', color: '#fff' }
-                                                                                }}
-                                                                            >
-                                                                                <ContentCopyIcon fontSize="small" />
-                                                                            </IconButton>
-                                                                        </Tooltip>
-                                                                    </Box>
-                                                                    <Typography variant="caption" sx={{ mt: 1, display: 'block', color: '#777', fontWeight: 600, px: 0.5 }}>
-                                                                        Titular: <span style={{ color: '#444', textTransform: 'capitalize' }}>{banco.beneficiario}</span>
-                                                                    </Typography>
-                                                                </CardContent>
-                                                            </Card>
-                                                        </Grid>
-                                                    ))}
-                                                </Grid>
+                                                                <Typography variant="caption" sx={{ mt: 1, display: 'block', color: '#777', fontWeight: 600, px: 0.5 }}>
+                                                                    Titular: <span style={{ color: '#444', textTransform: 'capitalize' }}>{banco.beneficiario}</span>
+                                                                </Typography>
+                                                            </CardContent>
+                                                        </Card>
+                                                    </Grid>
+                                                ))}
+                                            </Grid>
 
-                                                <Box sx={{
-                                                    mt: 6,
-                                                    p: 4,
-                                                    textAlign: 'center',
-                                                    background: 'linear-gradient(135deg, #FFF9FB 0%, #FFF4CC 100%)',
-                                                    borderRadius: '30px',
-                                                    border: '2px solid #FFF',
-                                                    boxShadow: 'inset 0 0 20px rgba(0,0,0,0.02)'
-                                                }}>
-                                                    <Typography variant="h6" sx={{ mb: 3, color: '#333', fontWeight: 800 }}>
-                                                        📸 ¿Ya pagaste? Sube tu captura
-                                                    </Typography>
-                                                    <Button
-                                                        component="label"
-                                                        variant="contained"
-                                                        startIcon={uploading ? <CircularProgress size={20} color="inherit" /> : <CloudUploadIcon />}
-                                                        disabled={uploading}
-                                                        sx={{
-                                                            background: 'linear-gradient(45deg, #FF6B9D 30%, #FFD54F 90%)',
-                                                            color: '#fff',
-                                                            borderRadius: '50px',
-                                                            px: 6, py: 2,
-                                                            fontSize: '1.1rem',
-                                                            textTransform: 'none',
-                                                            fontWeight: 900,
-                                                            boxShadow: '0 10px 25px rgba(255, 107, 157, 0.4)',
-                                                            '&:hover': {
-                                                                background: 'linear-gradient(45deg, #FF8C94 30%, #FFB800 90%)',
-                                                                transform: 'scale(1.02)'
-                                                            },
-                                                            transition: 'all 0.2s'
-                                                        }}
-                                                    >
-                                                        {uploading ? 'Subiendo...' : 'SUBIR COMPROBANTE'}
-                                                        <input type="file" hidden accept="image/*" onChange={handleFileUpload} />
-                                                    </Button>
-                                                </Box>
-                                            </Box>
-                                        ) : (
-                                            <Card sx={{
-                                                borderRadius: '24px',
-                                                bgcolor: alpha('#4CAF50', 0.05),
-                                                border: '2px solid #E8F5E9',
-                                                height: '100%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
+                                            <Box sx={{
+                                                mt: 6,
+                                                p: 4,
+                                                textAlign: 'center',
+                                                background: 'linear-gradient(135deg, #FFF9FB 0%, #FFF4CC 100%)',
+                                                borderRadius: '30px',
+                                                border: '2px solid #FFF',
+                                                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.02)'
                                             }}>
-                                                <CardContent sx={{ textAlign: 'center', p: 6 }}>
-                                                    <AccountBalanceIcon sx={{ fontSize: 60, color: '#4CAF50', mb: 2 }} />
-                                                    <Typography variant="h5" sx={{ fontWeight: 900, mb: 2 }}>Pago en Efectivo</Typography>
-                                                    <Typography variant="body1" sx={{ color: '#666', mb: 4 }}>
-                                                        Por favor, asegúrate de tener el monto exacto de <span style={{ fontWeight: 900 }}>${parseFloat(reserva.total).toFixed(2)}</span> el día del evento.
-                                                    </Typography>
-                                                    <Button
-                                                        variant="outlined"
-                                                        onClick={() => navigate('/reservas')}
-                                                        sx={{ borderRadius: '50px', px: 4, color: '#FF6B9D', borderColor: '#FF6B9D', fontWeight: 800 }}
-                                                    >
-                                                        Ir a mis Reservas
-                                                    </Button>
-                                                </CardContent>
-                                            </Card>
-                                        )}
-                                    </Box>
-                                )}
+                                                <Typography variant="h6" sx={{ mb: 3, color: '#333', fontWeight: 800 }}>
+                                                    📸 ¿Ya pagaste? Sube tu captura
+                                                </Typography>
+                                                <Button
+                                                    component="label"
+                                                    variant="contained"
+                                                    startIcon={uploading ? <CircularProgress size={20} color="inherit" /> : <CloudUploadIcon />}
+                                                    disabled={uploading}
+                                                    sx={{
+                                                        background: 'linear-gradient(45deg, #FF6B9D 30%, #FFD54F 90%)',
+                                                        color: '#fff',
+                                                        borderRadius: '50px',
+                                                        px: 6,
+                                                        py: 2,
+                                                        fontSize: '1.1rem',
+                                                        textTransform: 'none',
+                                                        fontWeight: 900,
+                                                        boxShadow: '0 10px 25px rgba(255, 107, 157, 0.4)',
+                                                        '&:hover': {
+                                                            background: 'linear-gradient(45deg, #FF8C94 30%, #FFB800 90%)',
+                                                            transform: 'scale(1.02)'
+                                                        },
+                                                        transition: 'all 0.2s'
+                                                    }}
+                                                >
+                                                    {uploading ? 'Subiendo...' : 'SUBIR COMPROBANTE'}
+                                                    <input type="file" hidden accept="image/*" onChange={handleFileUpload} />
+                                                </Button>
+                                            </Box>
+                                        </Box>
+                                    ) : (
+                                        <Card sx={{
+                                            borderRadius: '24px',
+                                            bgcolor: alpha('#4CAF50', 0.05),
+                                            border: '2px solid #E8F5E9',
+                                            height: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <CardContent sx={{ textAlign: 'center', p: 6 }}>
+                                                <AccountBalanceIcon sx={{ fontSize: 60, color: '#4CAF50', mb: 2 }} />
+                                                <Typography variant="h5" sx={{ fontWeight: 900, mb: 2 }}>Pago en Efectivo</Typography>
+                                                <Typography variant="body1" sx={{ color: '#666', mb: 4 }}>
+                                                    Por favor, asegúrate de tener el monto exacto de <span style={{ fontWeight: 900 }}>${parseFloat(reserva.total).toFixed(2)}</span> el día del evento.
+                                                </Typography>
+                                                <Button
+                                                    variant="outlined"
+                                                    onClick={() => navigate('/reservas')}
+                                                    sx={{ borderRadius: '50px', px: 4, color: '#FF6B9D', borderColor: '#FF6B9D', fontWeight: 800 }}
+                                                >
+                                                    Ir a mis Reservas
+                                                </Button>
+                                            </CardContent>
+                                        </Card>
+                                    )}
+                                </Box>
                             </Grid>
                         )}
                     </Grid>

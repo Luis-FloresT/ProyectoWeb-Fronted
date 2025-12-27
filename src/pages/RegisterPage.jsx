@@ -83,9 +83,12 @@ function RegisterPage() {
           <input
             style={styles.input}
             type="tel"
-            placeholder="Teléfono"
+            placeholder="Teléfono: 10 dígitos"
             value={telefono}
-            onChange={e => setTelefono(e.target.value)}
+            onChange={e => {
+              const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+              setTelefono(value);
+            }}
             required
             disabled={isLoading || success}
           />
