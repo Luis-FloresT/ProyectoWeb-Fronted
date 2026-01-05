@@ -10,9 +10,11 @@ export {
 } from './productos';
 export {
   getHorarios, getHorario, getHorariosDisponibles, createHorario, updateHorario, deleteHorario,
-  getReservas, getReserva, createReserva, updateReserva, deleteReserva,
+  getReservas, getReserva, createReserva, updateReserva, deleteReserva, patchReserva,
   getPagos, getPago, createPago, updatePago, deletePago,
   getCancelaciones, getCancelacion, createCancelacion, updateCancelacion, deleteCancelacion,
-  checkoutPago,
+  checkoutPago, verificarTransaccion,
 } from './reservas';
 export { getCarrito, addToCarrito, deleteItemCarrito, confirmarCarrito } from './carrito';
+export { getAdminStats } from './admin';
+export { getResenas, createResena } from './resenas';

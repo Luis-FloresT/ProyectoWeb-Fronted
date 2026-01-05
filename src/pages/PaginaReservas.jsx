@@ -1,6 +1,6 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getReservas, deleteReserva } from '../api';
+import { getReservas, deleteReserva, createResena } from '../api';
 import {
   Container,
   Typography,
@@ -28,6 +28,8 @@ import PageContainer from '../components/layout/PageContainer';
 import BackButton from '../components/BackButton';
 import LoadingSpinner from '../components/LoadingSpinner';
 import EmptyState from '../components/EmptyState';
+import ResenaModal from '../components/ResenaModal';
+import StarIcon from '@mui/icons-material/Star';
 
 function PaginaReservas() {
   const navigate = useNavigate();
@@ -35,6 +37,11 @@ function PaginaReservas() {
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // State for Review Modal
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedReserva, setSelectedReserva] = useState(null);
+  const [selectedServicio, setSelectedServicio] = useState(null);
   const clienteId = localStorage.getItem('cliente_id') || localStorage.getItem('id');
 
   useEffect(() => {
@@ -71,11 +78,24 @@ function PaginaReservas() {
     }
   };
 
+  const handleOpenResena = (reserva, servicio) => {
+    setSelectedReserva(reserva);
+    setSelectedServicio(servicio);
+    setReviewModalOpen(true);
+  };
+
+  const handleSubmitResena = async (resenaData) => {
+    await createResena(resenaData);
+    alert('¡Gracias por tu reseña!');
+    fetchReservas(); // Recargar para ver si cambió algo o simplemente para refrescar
+  };
+
   const getEstadoColor = (estado) => {
     switch (estado) {
       case 'APROBADA': return 'success';
       case 'PENDIENTE': return 'warning';
       case 'ANULADA': return 'error';
+      case 'FINALIZADA': return 'primary';
       default: return 'default';
     }
   };
@@ -312,6 +332,29 @@ function PaginaReservas() {
                         >
                           Ver Detalle / Gestionar Pago
                         </Button>
+
+                        {reserva.estado === 'FINALIZADA' && reserva.detalles && reserva.detalles.map(det => (
+                          det.servicio && (
+                            <Button
+                              key={det.id}
+                              variant="contained"
+                              size="small"
+                              startIcon={<StarIcon />}
+                              onClick={() => handleOpenResena(reserva, det.servicio)}
+                              sx={{ 
+                                mt: 2, 
+                                ml: 1,
+                                background: 'linear-gradient(135deg, #FFC74F 0%, #FFE66D 100%)', 
+                                color: '#fff', 
+                                borderRadius: '20px', 
+                                textTransform: 'none', 
+                                fontWeight: 700 
+                              }}
+                            >
+                              Calificar {det.servicio.nombre}
+                            </Button>
+                          )
+                        ))}
                       </Box>
                     </ListItem>
                     {index < reservas.length - 1 && <Divider component="li" />}
@@ -324,6 +367,14 @@ function PaginaReservas() {
           {loading && <LoadingSpinner message="Cargando reservas..." />}
           {error && <Alert severity="error">{error}</Alert>}
         </Container>
+
+        <ResenaModal
+          open={reviewModalOpen}
+          onClose={() => setReviewModalOpen(false)}
+          reserva={selectedReserva}
+          servicio={selectedServicio}
+          onSubmit={handleSubmitResena}
+        />
       </PageContainer>
     </ThemeProvider>
 

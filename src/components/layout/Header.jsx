@@ -75,13 +75,13 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
           </NavLink>
         )}
         {isAdmin && (
-          <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" style={{
+          <NavLink to="/admin-dashboard" style={({ isActive }) => ({
             color: "#fff",
-            textDecoration: "none",
-            opacity: 0.9,
-          }}>
-            ⚙️ Admin
-          </a>
+            textDecoration: isActive ? "underline" : "none",
+            opacity: isActive ? 1 : 0.9,
+          })}>
+            📊 Dashboard
+          </NavLink>
         )}
       </nav>
 

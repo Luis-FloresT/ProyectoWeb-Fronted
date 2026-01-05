@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './auth/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Importa páginas necesarias
+import AdminRoute from './components/AdminRoute';
 import PaginaInicio from './pages/PaginaInicio';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -23,6 +25,7 @@ import ArmaTuFiesta from "./pages/ArmaTuFiesta";
 import Ofertas from "./pages/Ofertas";
 import Proveedor from "./pages/Proveedor";
 import CalendarioReservas from "./pages/CalendarioReservas";
+import AdminDashboard from "./pages/AdminDashboard";
 
 
 import './App.css';
@@ -32,6 +35,7 @@ function App() {
 	return (
 		<ErrorBoundary>
 			<AuthProvider>
+				<Toaster position="top-right" />
 				<Routes>
 					{/* Página principal - PÚBLICA */}
 					<Route path="/" element={<PaginaInicio />} />
@@ -48,6 +52,11 @@ function App() {
 					<Route path="/reservas" element={<ProtectedRoute><PaginaReservas /></ProtectedRoute>} />
 					<Route path="/pagos" element={<ProtectedRoute><PaginaPagos /></ProtectedRoute>} />
 					<Route path="/cancelaciones" element={<ProtectedRoute><PaginaCancelaciones /></ProtectedRoute>} />
+					
+					{/* Ruta protegida de Administrador */}
+					<Route element={<AdminRoute />}>
+						<Route path="/admin-dashboard" element={<AdminDashboard />} />
+					</Route>
 
 					{/* Ruta por defecto */}
 					<Route path="*" element={<Navigate to="/" replace />} />

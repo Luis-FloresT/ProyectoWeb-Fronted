@@ -15,7 +15,9 @@ export const getReservas = () => api.get('/reservas/');
 export const getReserva = (id) => api.get(`/reservas/${id}/`);
 export const createReserva = (data) => api.post('/reservas/', data);
 export const updateReserva = (id, data) => api.put(`/reservas/${id}/`, data);
+export const patchReserva = (id, data) => api.patch(`/reservas/${id}/`, data);
 export const deleteReserva = (id) => api.delete(`/reservas/${id}/`);
+export const verificarTransaccion = (txId) => api.get(`/reservas/verificar_transaccion/?tx_id=${txId}`);
 export const checkoutPago = (reserva_id, data) => api.post(`/checkout-pago/${reserva_id}/`, data);
 export const getBancos = () => api.get('/bancos/');
 

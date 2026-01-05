@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
-  TextField,
   Box,
   Typography,
   Alert,
@@ -12,15 +11,13 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  InputAdornment,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { es } from 'date-fns/locale';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import LocationPicker from './LocationPicker';
 
 export default function ReservaModal({
   open,
@@ -37,6 +34,8 @@ export default function ReservaModal({
   const [horarios, setHorarios] = useState([]);
   const [horarioSeleccionado, setHorarioSeleccionado] = useState('');
   const [direccion, setDireccion] = useState('');
+  const [latitud, setLatitud] = useState(null);
+  const [longitud, setLongitud] = useState(null);
   const [metodoPago, setMetodoPago] = useState('transferencia');
 
   // ============ ESTADOS DE CONTROL ============
@@ -51,6 +50,8 @@ export default function ReservaModal({
       setFechaEvento(null);
       setHorarioSeleccionado('');
       setDireccion('');
+      setLatitud(null);
+      setLongitud(null);
       setMetodoPago('transferencia');
       setHorarios([]);
       setError(null);
@@ -102,6 +103,8 @@ export default function ReservaModal({
     setFechaEvento(null);
     setHorarioSeleccionado('');
     setDireccion('');
+    setLatitud(null);
+    setLongitud(null);
     setMetodoPago('transferencia');
     setHorarios([]);
     setError(null);
@@ -118,6 +121,10 @@ export default function ReservaModal({
     }
     if (!horarioSeleccionado) {
       setError('Selecciona un horario disponible');
+      return false;
+    }
+    if (!latitud || !longitud) {
+      setError('Debes seleccionar una ubicación en el mapa');
       return false;
     }
     if (!direccion.trim()) {
@@ -160,6 +167,8 @@ export default function ReservaModal({
       const payload = {
         fecha_evento: fechaFormateada,
         direccion_evento: direccion,
+        latitud: latitud,
+        longitud: longitud,
         horario: parseInt(horarioSeleccionado),
         estado: 'PENDIENTE',
         detalles: []
@@ -382,25 +391,14 @@ export default function ReservaModal({
               </FormControl>
             )}
 
-            {/* DIRECCIÓN */}
-            <TextField
-              fullWidth
-              label="Dirección del Evento"
-              value={direccion}
-              onChange={(e) => setDireccion(e.target.value)}
-              required
-              multiline
-              rows={2}
-              placeholder="Calle, número, colonia, ciudad"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LocationOnIcon sx={{ color: '#FF6B9D' }} />
-                  </InputAdornment>
-                ),
+            {/* UBICACIÓN CON MAPA */}
+            <LocationPicker
+              onLocationChange={({ latitud: lat, longitud: lng, direccion: dir }) => {
+                setLatitud(lat);
+                setLongitud(lng);
+                setDireccion(dir);
               }}
               disabled={loading}
-              sx={{ mb: 2 }}
             />
 
             {/* MODO DE PAGO */}

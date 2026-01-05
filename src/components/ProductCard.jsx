@@ -8,6 +8,7 @@ import {
   Box,
   Chip,
 } from '@mui/material';
+import { toast } from 'react-hot-toast';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const serviceColors = [
@@ -137,8 +138,21 @@ export default function ProductCard({ item, tipo, index, onReservar, onAddToCarr
           color: tipo === 'combo' ? '#FF6B9D' : '#FFC74F',
           fontWeight: "bold",
           fontSize: "24px",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
         }}>
           {getPriceDisplay()}
+          {tipo === 'servicio' && item.promedio_calificacion > 0 && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#FFC74F' }}>
+                ⭐ {item.promedio_calificacion}
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#aaa', fontWeight: 'normal' }}>
+                ({item.total_resenas})
+              </Typography>
+            </Box>
+          )}
         </Typography>
       </CardContent>
 
@@ -177,7 +191,10 @@ export default function ProductCard({ item, tipo, index, onReservar, onAddToCarr
               background: "linear-gradient(135deg, #FFE66D 0%, #FFC74F 100%)",
             },
           }}
-          onClick={() => onAddToCarrito(item, tipo)}
+          onClick={() => {
+            onAddToCarrito(item, tipo);
+            toast.success(`${item.nombre} agregado al carrito`);
+          }}
         >
           Agregar
         </Button>

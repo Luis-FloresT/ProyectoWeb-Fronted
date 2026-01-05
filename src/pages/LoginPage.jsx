@@ -6,12 +6,14 @@ function LoginPage() {
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
       // IMPORTANTE: los nombres de campo deben coincidir con tu API de Django.
@@ -22,6 +24,8 @@ function LoginPage() {
       navigate('/');
     } catch (err) {
       setError(err?.response?.data?.message || 'Usuario o clave incorrectos');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,6 +41,7 @@ function LoginPage() {
             value={usuario}
             onChange={e => setUsuario(e.target.value)}
             required
+            disabled={isLoading}
           />
           <input
             style={styles.input}
@@ -45,9 +50,23 @@ function LoginPage() {
             value={clave}
             onChange={e => setClave(e.target.value)}
             required
+            disabled={isLoading}
           />
-          <button style={styles.button} type="submit">
-            ENTRAR
+          <button 
+            style={{
+              ...styles.button,
+              opacity: isLoading ? 0.7 : 1,
+              cursor: isLoading ? 'not-allowed' : 'pointer'
+            }} 
+            type="submit" 
+            disabled={isLoading}
+          >
+            {isLoading ? (
+               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                 <span className="spinner" style={styles.spinner}></span>
+                 Iniciando...
+               </div>
+            ) : 'ENTRAR'}
           </button>
           <a style={styles.forgotLink} href="/forgot-password">
             ¿Olvidaste tu contraseña?
@@ -153,8 +172,27 @@ const styles = {
     textDecoration: 'none',
     fontSize: '0.9rem',
     fontWeight: 500,
+    fontWeight: 500,
     transition: 'color 0.2s ease',
   },
+  spinner: {
+    width: '20px',
+    height: '20px',
+    border: '3px solid rgba(255,255,255,0.3)',
+    borderRadius: '50%',
+    borderTop: '3px solid #fff',
+    animation: 'spin 1s linear infinite',
+  }
 };
+
+// Add global keyframes for spinner if not present
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+`;
+document.head.appendChild(styleSheet);
 
 export default LoginPage;
