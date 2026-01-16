@@ -20,6 +20,10 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
+    
+    // Asegurar header de Ngrok en TODAS las peticiones
+    config.headers['ngrok-skip-browser-warning'] = 'true';
+
     if (token) {
       config.headers.Authorization = `Token ${token}`;
     }

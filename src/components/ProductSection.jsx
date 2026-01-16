@@ -73,7 +73,7 @@ export default function ProductSection({
         </Box>
       )}
 
-      {items.length > 0 && (
+      {Array.isArray(items) && items.length > 0 && (
         <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           
           <IconButton 
@@ -134,7 +134,7 @@ export default function ProductSection({
         </Box>
       )}
 
-      {items.length === 0 && !loading && (
+      {(!Array.isArray(items) || items.length === 0) && !loading && (
         <Box sx={{
           textAlign: "center",
           py: 5,
