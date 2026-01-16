@@ -74,15 +74,21 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
             📅 Mis Reservas
           </NavLink>
         )}
-        {isAdmin && (
-          <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" style={{
-            color: "#fff",
-            textDecoration: "none",
-            opacity: 0.9,
-          }}>
-            ⚙️ Admin
-          </a>
-        )}
+        {isAdmin && (() => {
+          const apiUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+          // Eliminar /api al final (si existe) y agregar /admin/
+          const adminUrl = apiUrl.replace(/\/api\/?$/, '') + '/admin/';
+
+          return (
+            <a href={adminUrl} target="_blank" rel="noopener noreferrer" style={{
+              color: "#fff",
+              textDecoration: "none",
+              opacity: 0.9,
+            }}>
+              ⚙️ Admin
+            </a>
+          );
+        })()}
       </nav>
 
       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
