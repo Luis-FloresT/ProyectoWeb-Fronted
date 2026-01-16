@@ -25,6 +25,7 @@ import Proveedor from "./pages/Proveedor";
 
 
 import CalendarioReservas from "./pages/CalendarioReservas";
+import PaginaVerificacion from "./pages/PaginaVerificacion";
 
 
 import './App.css';
@@ -43,6 +44,7 @@ function App() {
 					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/forgot-password" element={<ForgotPasswordPage />} />
 					<Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+					<Route path="/verificar" element={<PaginaVerificacion />} />
 
 					{/* Rutas protegidas - requieren autenticación */}
 					<Route path="/carrito" element={<ProtectedRoute><PaginaCarrito /></ProtectedRoute>} />
