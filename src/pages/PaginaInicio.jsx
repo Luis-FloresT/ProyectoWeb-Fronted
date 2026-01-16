@@ -52,9 +52,10 @@ export default function PaginaInicio() {
           getCombos(),
           getPromociones(),
         ]);
-        setServicios(serviciosRes.data);
-        setCombos(combosRes.data);
-        setPromociones(promocionesRes.data);
+        // Validar que sean arrays antes de setear (evita r.map error si DB está vacía/null)
+        setServicios(Array.isArray(serviciosRes.data) ? serviciosRes.data : []);
+        setCombos(Array.isArray(combosRes.data) ? combosRes.data : []);
+        setPromociones(Array.isArray(promocionesRes.data) ? promocionesRes.data : []);
         setLoading(false);
       } catch (err) {
         setError('Error cargando datos');
