@@ -152,7 +152,7 @@ function PaginaConfirmacion() {
                     {mensaje && <Alert severity="success" sx={{ mb: 2, py: 0, borderRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem' }}>{mensaje}</Alert>}
                     {error && <Alert severity="error" sx={{ mb: 2, py: 0, borderRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem' }}>{error}</Alert>}
 
-                    <Grid container spacing={2} justifyContent={reserva.estado === 'APROBADA' ? 'center' : 'flex-start'}>
+                    <Grid container spacing={2} justifyContent="center">
                         {/* COLUMNA IZQUIERDA: Resumen del Pedido */}
                         <Grid item xs={12} md={reserva.estado === 'APROBADA' ? 8 : 5}>
                             <Card sx={{
@@ -512,8 +512,18 @@ function PaginaConfirmacion() {
                         </Button>
                     </Box>
 
+                    {infoCopiado && (
+                        <Alert 
+                            severity="success" 
+                            onClose={() => setInfoCopiado(false)}
+                            sx={{ mb: 2, borderRadius: '12px' }}
+                        >
+                            ✅ Número copiado al portapapeles
+                        </Alert>
+                    )}
+
                     <Snackbar
-                        open={infoCopiado}
+                        open={false}
                         autoHideDuration={2000}
                         onClose={() => setInfoCopiado(false)}
                         message="✅ Número copiado al portapapeles"

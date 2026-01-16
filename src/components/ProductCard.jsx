@@ -35,7 +35,7 @@ export default function ProductCard({ item, tipo, index, onReservar, onAddToCarr
     }
   };
 
-  const precio = item.precio_base || item.precio_combo || item.precio_total || 0;
+  const precio = item.precio || item.precio_base || item.precio_combo || item.precio_total || 0;
 
   return (
     <Card

@@ -10,7 +10,7 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
   return (
     <header style={{
       background: "linear-gradient(90deg, #FF6B9D 0%, #FFC74F 100%)",
-      padding: "20px 40px",
+      padding: "15px 30px",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
@@ -18,20 +18,22 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
       position: "sticky",
       top: 0,
       zIndex: 100,
+      flexWrap: "nowrap",
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-        <CelebrationIcon sx={{ fontSize: 40, color: "#fff" }} />
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: "fit-content" }}>
+        <CelebrationIcon sx={{ fontSize: 36, color: "#fff" }} />
         <div>
           <h1 style={{
             color: "#fff",
             margin: 0,
-            fontSize: "28px",
+            fontSize: "22px",
             fontWeight: "bold",
-            textShadow: "2px 2px 4px rgba(0,0,0,0.2)"
+            textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
+            whiteSpace: "nowrap"
           }}>
-            🎉 BURBUJITAS DE COLORES 🎉
+            🎉 BURBUJITAS DE COLORES
           </h1>
-          <p style={{ color: "#fff", margin: 0, fontSize: "12px", opacity: 0.9 }}>
+          <p style={{ color: "#fff", margin: 0, fontSize: "11px", opacity: 0.9, whiteSpace: "nowrap" }}>
             Fiestas infantiles llenas de diversión
           </p>
         </div>
@@ -39,15 +41,18 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
 
       <nav style={{
         display: "flex",
-        gap: "30px",
+        gap: "20px",
         fontWeight: "bold",
-        fontSize: "16px",
+        fontSize: "14px",
+        alignItems: "center",
+        flexShrink: 0,
       }}>
         <a href="#servicios" style={{
           color: "#fff",
           textDecoration: "none",
           opacity: 0.9,
           transition: "all 0.3s",
+          whiteSpace: "nowrap",
         }}>
           🎈 Servicios
         </a>
@@ -55,6 +60,7 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
           color: "#fff",
           textDecoration: "none",
           opacity: 0.9,
+          whiteSpace: "nowrap",
         }}>
           🎁 Combos
         </a>
@@ -62,6 +68,7 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
           color: "#fff",
           textDecoration: "none",
           opacity: 0.9,
+          whiteSpace: "nowrap",
         }}>
           🎊 Promociones
         </a>
@@ -70,6 +77,7 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
             color: "#fff",
             textDecoration: isActive ? "underline" : "none",
             opacity: isActive ? 1 : 0.9,
+            whiteSpace: "nowrap",
           })}>
             📅 Mis Reservas
           </NavLink>
@@ -79,13 +87,14 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
             color: "#fff",
             textDecoration: "none",
             opacity: 0.9,
+            whiteSpace: "nowrap",
           }}>
             ⚙️ Admin
           </a>
         )}
       </nav>
 
-      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+      <div style={{ display: "flex", gap: "8px", alignItems: "center", flexShrink: 0 }}>
         {token && (
           <IconButton 
             onClick={() => navigate('/carrito')}
@@ -105,34 +114,36 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
             <button
               onClick={() => navigate('/login')}
               style={{
-                padding: "10px 25px",
+                padding: "8px 20px",
                 background: "#fff",
                 color: "#FF6B9D",
                 border: "none",
                 fontWeight: "bold",
                 borderRadius: "25px",
                 cursor: "pointer",
-                fontSize: "14px",
+                fontSize: "13px",
                 transition: "all 0.3s",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                whiteSpace: "nowrap",
               }}
               onMouseOver={(e) => e.target.style.transform = "scale(1.05)"}
               onMouseOut={(e) => e.target.style.transform = "scale(1)"}
             >
-              🔑 Iniciar Sesión
+              🔑 Iniciar
             </button>
             <button
               onClick={() => navigate('/register')}
               style={{
-                padding: "10px 25px",
+                padding: "8px 20px",
                 background: "transparent",
                 color: "#fff",
                 border: "2px solid #fff",
                 fontWeight: "bold",
                 borderRadius: "25px",
                 cursor: "pointer",
-                fontSize: "14px",
+                fontSize: "13px",
                 transition: "all 0.3s",
+                whiteSpace: "nowrap",
               }}
               onMouseOver={(e) => e.target.style.background = "rgba(255,255,255,0.2)"}
               onMouseOut={(e) => e.target.style.background = "transparent"}
@@ -144,16 +155,17 @@ export default function Header({ token, isAdmin, carritoCount, onLogout }) {
           <button
             onClick={onLogout}
             style={{
-              padding: "10px 25px",
+              padding: "8px 20px",
               background: "#fff",
               color: "#FF6B9D",
               border: "none",
               fontWeight: "bold",
               borderRadius: "25px",
               cursor: "pointer",
-              fontSize: "14px",
+              fontSize: "13px",
               transition: "all 0.3s",
               boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              whiteSpace: "nowrap",
             }}
             onMouseOver={(e) => e.target.style.transform = "scale(1.05)"}
             onMouseOut={(e) => e.target.style.transform = "scale(1)"}

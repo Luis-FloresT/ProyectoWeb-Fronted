@@ -13,6 +13,7 @@ import {
   FormControl,
   InputLabel,
   InputAdornment,
+  Modal,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -240,30 +241,21 @@ export default function ReservaModal({
     }
   };
 
-  // ============ RENDERIZAR CON CUSTOM MODAL (sin Dialog de MUI) ============
+  // ============ RENDERIZAR CON MODAL DE MUI ============
   return (
-    <>
-      {/* OVERLAY OSCURO */}
-      <Box
-        sx={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1300,
-        }}
-        onClick={handleClose}
-      />
-
+    <Modal
+      open={open}
+      onClose={(event, reason) => {
+        if (reason !== 'backdropClick' || !loading) {
+          handleClose();
+        }
+      }}
+      aria-labelledby="modal-reserva-title"
+    >
       {/* MODAL CONTENT */}
       <Box
         sx={{
-          position: 'fixed',
+          position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
@@ -271,11 +263,26 @@ export default function ReservaModal({
           maxWidth: '500px',
           background: '#fff',
           borderRadius: '15px',
-          boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
-          zIndex: 1301,
+          boxShadow: 24,
           maxHeight: '90vh',
           overflowY: 'auto',
+          outline: 'none',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#FFE3ED',
+            borderRadius: '10px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'linear-gradient(135deg, #FF6B9D 0%, #FFC74F 100%)',
+            borderRadius: '10px',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #FF8C94 0%, #FFD54F 100%)',
+            },
+          },
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* TÍTULO */}
         <Box
@@ -479,6 +486,6 @@ export default function ReservaModal({
           </Button>
         </Box>
       </Box>
-    </>
+    </Modal>
   );
 }

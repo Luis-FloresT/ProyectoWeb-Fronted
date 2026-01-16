@@ -8,6 +8,7 @@ import { theme } from '../theme/theme';
 import Header from '../components/layout/Header';
 import ProductSection from '../components/ProductSection';
 import ReservaModal from '../components/ReservaModal';
+import InfoModal from '../components/InfoModal';
 
 // === 1. IMÁGENES PARA EL CARRUSEL  ===
 const bannerImages = [
@@ -33,6 +34,19 @@ export default function PaginaInicio() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedTipo, setSelectedTipo] = useState(null);
+
+  // Estado para los modales de info
+  const [infoModals, setInfoModals] = useState({
+    quienesSomos: false,
+    sobreNosotros: false,
+    terminos: false,
+    privacidad: false,
+    contacto: false,
+    solicitarServicio: false,
+    armatufiesta: false,
+    ofertas: false,
+    proveedor: false,
+  });
 
   // === 2. ESTADO Y LÓGICA DEL CARRUSEL ===
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -296,14 +310,20 @@ const iconBoxStyle = {
             <Box>
               <Typography sx={{ fontWeight: "bold", marginBottom: "15px" }}>BURBUJITAS</Typography>
               {[
-                { text: "¿Quiénes somos?", path: "/quienes-somos" },
-                { text: "Sobre nosotros", path: "/quienes-somos" },
+                { text: "¿Quiénes somos?", key: "quienesSomos" },
+                { text: "Sobre nosotros", key: "sobreNosotros" },
                 { text: "Ingresar", path: "/login" },
-                { text: "Términos y condiciones", path: "/terminos" },
-                { text: "Política de privacidad", path: "/privacidad" },
-                { text: "Contacto", path: "/contacto" },
+                { text: "Términos y condiciones", key: "terminos" },
+                { text: "Política de privacidad", key: "privacidad" },
+                { text: "Contacto", key: "contacto" },
               ].map((item) => (
-                <Typography key={item.text} sx={footerHoverStyle} onClick={() => navigate(item.path)}>{item.text}</Typography>
+                <Typography 
+                  key={item.text} 
+                  sx={footerHoverStyle} 
+                  onClick={() => item.key ? setInfoModals({...infoModals, [item.key]: true}) : navigate(item.path)}
+                >
+                  {item.text}
+                </Typography>
               ))}
             </Box>
 
@@ -311,12 +331,18 @@ const iconBoxStyle = {
             <Box>
               <Typography sx={{ fontWeight: "bold", marginBottom: "15px" }}>Servicios</Typography>
               {[
-                { text: "Solicitar servicio", path: "/solicitar-servicio" },
-                { text: "Arma tu fiesta", path: "/arma-tu-fiesta" },
-                { text: "Ofertas", path: "/ofertas" },
-                { text: "Quiero ser proveedor", path: "/proveedor" },
+                { text: "Solicitar servicio", key: "solicitarServicio" },
+                { text: "Arma tu fiesta", key: "armatufiesta" },
+                { text: "Ofertas", key: "ofertas" },
+                { text: "Quiero ser proveedor", key: "proveedor" },
               ].map((item) => (
-                <Typography key={item.text} sx={footerHoverStyle} onClick={() => navigate(item.path)}>{item.text}</Typography>
+                <Typography 
+                  key={item.text} 
+                  sx={footerHoverStyle} 
+                  onClick={() => setInfoModals({...infoModals, [item.key]: true})}
+                >
+                  {item.text}
+                </Typography>
               ))}
             </Box>
 
@@ -345,6 +371,136 @@ const iconBoxStyle = {
           tipo={selectedTipo}
           onReservaCreada={handleReservaCreada}
         />
+
+        <InfoModal
+          open={infoModals.quienesSomos}
+          onClose={() => setInfoModals({...infoModals, quienesSomos: false})}
+          title="¿Quiénes Somos?"
+          icon="🎈"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            Burbujitas de Colores es una empresa especializada en crear momentos mágicos e inolvidables 
+            para los más pequeños de la casa. Con años de experiencia, nos dedicamos a organizar fiestas 
+            infantiles llenas de diversión, emociones y sonrisas que perdurarán en la memoria de tus hijos.
+          </Typography>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.sobreNosotros}
+          onClose={() => setInfoModals({...infoModals, sobreNosotros: false})}
+          title="Sobre Nosotros"
+          icon="💖"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            Somos un equipo apasionado por hacer que cada celebración sea especial. Contamos con 
+            profesionales capacitados, decoraciones coloridas y actividades entretenidas diseñadas 
+            específicamente para niños. Nuestro compromiso es convertir tu visión en realidad.
+          </Typography>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.terminos}
+          onClose={() => setInfoModals({...infoModals, terminos: false})}
+          title="Términos y Condiciones"
+          icon="📋"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            Al utilizar nuestros servicios, aceptas nuestros términos y condiciones. Las reservas deben 
+            confirmarse con 15 días de anticipación. El cliente es responsable de proporcionar información 
+            correcta sobre la fecha, hora y lugar del evento. Nos reservamos el derecho de cancelar servicios 
+            en caso de incumplimiento de pagos. Para más detalles, contáctanos directamente.
+          </Typography>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.privacidad}
+          onClose={() => setInfoModals({...infoModals, privacidad: false})}
+          title="Política de Privacidad"
+          icon="🔒"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            Tu privacidad es importante para nosotros. Los datos personales que proporcionas se utilizan 
+            únicamente para procesar tus reservas y mejorar nuestros servicios. No compartimos información 
+            con terceros sin tu consentimiento. Tus datos están protegidos con los más altos estándares 
+            de seguridad.
+          </Typography>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.contacto}
+          onClose={() => setInfoModals({...infoModals, contacto: false})}
+          title="Contacto"
+          icon="📞"
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+              <Typography sx={{ fontWeight: 'bold', color: '#FF6B9D' }}>📧 Email</Typography>
+              <Typography sx={{ color: '#333' }}>info@burbujitasdecolores.com</Typography>
+            </Box>
+            <Box>
+              <Typography sx={{ fontWeight: 'bold', color: '#FF6B9D' }}>📱 WhatsApp</Typography>
+              <Typography sx={{ color: '#333' }}>+593 981362088</Typography>
+            </Box>
+            <Box>
+              <Typography sx={{ fontWeight: 'bold', color: '#FF6B9D' }}>🌐 Redes Sociales</Typography>
+              <Typography sx={{ color: '#333' }}>Síguenos en Instagram y TikTok para ver nuestros eventos</Typography>
+            </Box>
+          </Box>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.solicitarServicio}
+          onClose={() => setInfoModals({...infoModals, solicitarServicio: false})}
+          title="Solicitar Servicio"
+          icon="🎉"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            ¿Deseas solicitar un servicio personalizado? Nuestro equipo está listo para ayudarte. 
+            Contáctanos directamente por WhatsApp o email con los detalles de tu evento: fecha, 
+            número de niños, temática deseada y presupuesto. Nos encantaría hacer que tu fiesta 
+            sea inolvidable.
+          </Typography>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.armatufiesta}
+          onClose={() => setInfoModals({...infoModals, armatufiesta: false})}
+          title="Arma Tu Fiesta"
+          icon="🛠️"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            Con nuestra opción "Arma tu Fiesta" puedes combinar servicios y crear el paquete perfecto 
+            para tu celebración. Elige tus decoraciones, actividades, catering y entretenimiento. 
+            Nuestro sistema te permite personalizar cada detalle según tus preferencias y presupuesto.
+          </Typography>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.ofertas}
+          onClose={() => setInfoModals({...infoModals, ofertas: false})}
+          title="Ofertas"
+          icon="🎁"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            ¡Aprovecha nuestras ofertas especiales! Tenemos descuentos por reservas anticipadas, 
+            paquetes para grupos grandes y promociones en fechas especiales. Visita nuestra sección 
+            de promociones para conocer todas las ofertas disponibles. ¡No te pierdas estas oportunidades!
+          </Typography>
+        </InfoModal>
+
+        <InfoModal
+          open={infoModals.proveedor}
+          onClose={() => setInfoModals({...infoModals, proveedor: false})}
+          title="Quiero Ser Proveedor"
+          icon="🤝"
+        >
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.8 }}>
+            ¿Tienes servicios complementarios para eventos? ¡Nos encantaría trabajar contigo! 
+            Buscamos fotógrafos, payasos, magos, catering y otros proveedores de calidad. 
+            Envíanos tu propuesta a info@burbujitasdecolores.com y nos pondremos en contacto 
+            para explorar una posible colaboración.
+          </Typography>
+        </InfoModal>
 
         <Snackbar
           open={snackbarOpen}

@@ -74,28 +74,33 @@ export default function ProductSection({
       )}
 
       {items.length > 0 && (
-        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: items.length <= 3 ? 'center' : 'flex-start' }}>
           
-          <IconButton 
-            onClick={() => handleScroll('left')}
-            sx={{ 
-              position: 'absolute', left: -20, zIndex: 2, 
-              backgroundColor: 'white', '&:hover': { backgroundColor: '#f0f0f0' },
-              boxShadow: 3, display: { xs: 'none', md: 'flex' } 
-            }}
-          >
-            <ChevronLeft />
-          </IconButton>
+          {items.length > 3 && (
+            <IconButton 
+              onClick={() => handleScroll('left')}
+              sx={{ 
+                position: 'absolute', left: -20, zIndex: 2, 
+                backgroundColor: 'white', '&:hover': { backgroundColor: '#f0f0f0' },
+                boxShadow: 3, display: { xs: 'none', md: 'flex' } 
+              }}
+            >
+              <ChevronLeft />
+            </IconButton>
+          )}
 
           <Box 
             ref={scrollRef} 
             sx={{ 
               display: 'flex', 
-              overflowX: 'auto', 
+              overflowX: items.length > 3 ? 'auto' : 'visible', 
               gap: 3,
               paddingX: 1,
               paddingY: 2,
               scrollBehavior: 'smooth',
+              justifyContent: items.length <= 3 ? 'center' : 'flex-start',
+              width: items.length <= 3 ? 'auto' : '100%',
+              margin: items.length <= 3 ? '0 auto' : '0',
               '&::-webkit-scrollbar': { display: 'none' }, 
               msOverflowStyle: 'none',
               scrollbarWidth: 'none',
@@ -106,7 +111,7 @@ export default function ProductSection({
                 key={item.id} 
                 sx={{ 
                   minWidth: { xs: '280px', sm: '320px' }, 
-                  flexShrink: 0 
+                  flexShrink: 0,
                 }}
               >
                 <ProductCard
@@ -120,16 +125,18 @@ export default function ProductSection({
             ))}
           </Box>
 
-          <IconButton 
-            onClick={() => handleScroll('right')}
-            sx={{ 
-              position: 'absolute', right: -20, zIndex: 2, 
-              backgroundColor: 'white', '&:hover': { backgroundColor: '#f0f0f0' },
-              boxShadow: 3, display: { xs: 'none', md: 'flex' } 
-            }}
-          >
-            <ChevronRight />
-          </IconButton>
+          {items.length > 3 && (
+            <IconButton 
+              onClick={() => handleScroll('right')}
+              sx={{ 
+                position: 'absolute', right: -20, zIndex: 2, 
+                backgroundColor: 'white', '&:hover': { backgroundColor: '#f0f0f0' },
+                boxShadow: 3, display: { xs: 'none', md: 'flex' } 
+              }}
+            >
+              <ChevronRight />
+            </IconButton>
+          )}
 
         </Box>
       )}
