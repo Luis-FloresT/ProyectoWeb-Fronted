@@ -4,8 +4,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import { Container, Paper, Typography, Box, CircularProgress, Alert } from '@mui/material';
+import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/client';
 import PageContainer from '../components/layout/PageContainer';
 
 const CalendarioReservas = () => {
@@ -20,7 +21,7 @@ const CalendarioReservas = () => {
 
     const fetchDisponibilidad = async () => {
         try {
-            const apiRes = await axios.get(`${import.meta.env.VITE_API_URL}/fiesta/disponibilidad-calendario/`);
+            const apiRes = await api.get('/fiesta/disponibilidad-calendario/');
             setDisponibilidad(apiRes.data);
             setLoading(false);
         } catch (err) {

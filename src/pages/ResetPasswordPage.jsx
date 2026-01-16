@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/client';
 import { useNavigate, useParams } from 'react-router-dom';
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 function ResetPasswordPage() {
   const { token } = useParams();
@@ -32,7 +30,7 @@ function ResetPasswordPage() {
     setMessage('');
 
     try {
-      const response = await axios.post(`${API_URL}/password-reset/confirm/`, { 
+      const response = await api.post('/password-reset/confirm/', { 
         token, 
         password 
       });

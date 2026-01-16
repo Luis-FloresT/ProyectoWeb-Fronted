@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/client';
 import { useNavigate } from 'react-router-dom';
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -18,7 +16,7 @@ function ForgotPasswordPage() {
     setMessage('');
 
     try {
-      const response = await axios.post(`${API_URL}/password-reset/request/`, { email });
+      const response = await api.post('/password-reset/request/', { email });
       setMessage(response.data.message);
       setIsLoading(false);
     } catch (err) {
