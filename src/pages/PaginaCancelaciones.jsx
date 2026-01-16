@@ -165,7 +165,7 @@ function PaginaCancelaciones() {
                   <MenuItem value="">
                     <em>Seleccione una reserva a cancelar</em>
                   </MenuItem>
-                  {reservas.length > 0 ? (
+                  {Array.isArray(reservas) && reservas.length > 0 ? (
                     reservas.map(r => (
                       <MenuItem key={r.id} value={r.id}>
                         {r.codigo_reserva} (Cliente ID: {r.cliente})
@@ -233,7 +233,7 @@ function PaginaCancelaciones() {
       {!loading && !error && (
         <Paper>
           <List>
-            {cancelaciones.map((canc, index) => (
+            {Array.isArray(cancelaciones) && cancelaciones.map((canc, index) => (
               <React.Fragment key={canc.id}>
                 <ListItem>
                   <EventBusyIcon sx={{ mr: 2 }} />

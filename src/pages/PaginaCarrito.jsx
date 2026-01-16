@@ -137,7 +137,7 @@ function PaginaCarrito() {
           {!loading && items.length > 0 && (
             <Box>
               {/* Lista de items */}
-              {items.map((item) => (
+              {Array.isArray(items) && items.map((item) => (
                 <Card key={item.id} sx={{
                   mb: 2,
                   borderRadius: '15px',

@@ -58,7 +58,11 @@ export default function PaginaInicio() {
         setPromociones(Array.isArray(promocionesRes.data) ? promocionesRes.data : []);
         setLoading(false);
       } catch (err) {
+        console.error("Error crítico cargando datos:", err);
         setError('Error cargando datos');
+        setServicios([]);
+        setCombos([]);
+        setPromociones([]);
         setLoading(false);
       }
     };

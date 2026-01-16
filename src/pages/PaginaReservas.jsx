@@ -262,7 +262,7 @@ function PaginaReservas() {
           {!loading && !error && reservas.length > 0 && (
             <Paper elevation={3} sx={{ borderRadius: '15px', overflow: 'hidden' }}>
               <List>
-                {reservas.map((reserva, index) => (
+                {Array.isArray(reservas) && reservas.map((reserva, index) => (
                   <React.Fragment key={reserva.id}>
                     <ListItem
                       sx={{

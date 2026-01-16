@@ -210,7 +210,7 @@ function PaginaConfirmacion() {
                                     </Typography>
 
                                     <Box sx={{ pl: 0.5, mb: 2 }}>
-                                        {reserva.detalles?.map((item, index) => (
+                                        {Array.isArray(reserva.detalles) && reserva.detalles.map((item, index) => (
                                             <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                                                 <Typography variant="caption" sx={{ color: '#555', fontWeight: 500 }}>
                                                     {item.nombre_item} <span style={{ color: '#FF6B9D', fontWeight: 800, fontSize: '0.7rem' }}>x{item.cantidad}</span>
@@ -275,8 +275,9 @@ function PaginaConfirmacion() {
                                     {isTransferencia ? (
                                         <Box>
                                             <Grid container spacing={2}>
-                                                {bancos.map((banco) => (
+                                                {Array.isArray(bancos) && bancos.map((banco) => (
                                                     <Grid item xs={12} sm={6} key={banco.id}>
+                                                        {/* ... card content same as before ... */}
                                                         <Card sx={{
                                                             borderRadius: '24px',
                                                             border: '1px solid #FFE3ED',

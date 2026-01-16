@@ -161,7 +161,7 @@ function PaginaPagos() {
                   <MenuItem value="">
                     <em>Seleccione una reserva</em>
                   </MenuItem>
-                  {reservas.length > 0 ? (
+                  {Array.isArray(reservas) && reservas.length > 0 ? (
                     reservas.map(r => (
                       <MenuItem key={r.id} value={r.id}>
                         {r.codigo_reserva} (Total: ${r.total})
@@ -233,7 +233,7 @@ function PaginaPagos() {
       {!loading && !error && (
         <Paper>
           <List>
-            {pagos.map((pago, index) => (
+            {Array.isArray(pagos) && pagos.map((pago, index) => (
               <React.Fragment key={pago.id}>
                 <ListItem>
                   <PaymentIcon sx={{ mr: 2 }} />

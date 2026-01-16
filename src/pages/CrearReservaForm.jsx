@@ -187,7 +187,7 @@ function CrearReservaForm() {
                         onChange={(e) => setServicioId(e.target.value)}
                       >
                         <MenuItem value=""><em>Seleccione un servicio</em></MenuItem>
-                        {servicios.map(s => (
+                        {Array.isArray(servicios) && servicios.map(s => (
                           <MenuItem key={s.id} value={s.id}>
                             {s.nombre} - ${s.precio_base}
                           </MenuItem>
@@ -232,7 +232,7 @@ function CrearReservaForm() {
                         <MenuItem value="">
                           {cargandoHorarios ? 'Cargando horarios...' : 'Selecciona primero una fecha'}
                         </MenuItem>
-                        {horariosDisponibles.map(h => (
+                        {Array.isArray(horariosDisponibles) && horariosDisponibles.map(h => (
                           <MenuItem key={h.id} value={h.id}>
                             {h.hora_inicio} - {h.hora_fin}
                           </MenuItem>
