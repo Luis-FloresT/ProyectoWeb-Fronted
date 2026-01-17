@@ -40,7 +40,7 @@ const PaginaVerificacion = () => {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else if (status === 'success' && countdown === 0) {
-      navigate('/');
+      navigate('/login');
     }
   }, [status, countdown, navigate]);
 
@@ -107,12 +107,12 @@ const PaginaVerificacion = () => {
         {status === 'success' && (
           <Box>
             <Typography variant="body1" sx={{ color: '#FF6B9D', fontWeight: 'bold', mb: 3 }}>
-              Serás redirigido al inicio en {countdown} segundos...
+              Serás redirigido al inicio de sesión en {countdown} segundos...
             </Typography>
             <Button 
               variant="contained" 
               size="large"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/login')}
               sx={{ 
                   background: 'linear-gradient(90deg, #FF6B9D 0%, #FFC74F 100%)',
                   borderRadius: '50px',
@@ -128,7 +128,7 @@ const PaginaVerificacion = () => {
                   }
               }}
             >
-              Ir al Inicio ahora
+              Ir al Login ahora
             </Button>
           </Box>
         )}
