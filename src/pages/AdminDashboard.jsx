@@ -19,19 +19,35 @@ import PendingReservationsModal from '../components/admin/PendingReservationsMod
 const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const [todayIncome, setTodayIncome] = useState(0);
 
-  // Cargar contador real de pendientes
+  // Cargar contador real de pendientes e ingresos de hoy
   React.useEffect(() => {
-    const fetchCount = async () => {
+    const fetchStats = async () => {
       try {
         const { data } = await import('../api/reservas').then(m => m.getReservas());
+        
+        // Contar pendientes
         const count = data.filter(r => r.estado === 'PENDIENTE').length;
         setPendingCount(count);
+        
+        // Calcular ingresos de hoy (reservas aprobadas hoy)
+        const today = new Date().toISOString().split('T')[0];
+        const todayApproved = data.filter(r => {
+          if (r.estado === 'APROBADA' && r.fecha_confirmacion) {
+            const confirmDate = new Date(r.fecha_confirmacion).toISOString().split('T')[0];
+            return confirmDate === today;
+          }
+          return false;
+        });
+        
+        const income = todayApproved.reduce((sum, r) => sum + parseFloat(r.total || 0), 0);
+        setTodayIncome(income);
       } catch (e) {
-        console.error("Error al cargar contador:", e);
+        console.error("Error al cargar estadísticas:", e);
       }
     };
-    fetchCount();
+    fetchStats();
   }, [isModalOpen]); // Recargar cuando se cierra el modal (por si se aprobaron)
 
   return (
@@ -83,7 +99,7 @@ const AdminDashboard = () => {
         />
         <StatCard 
           title="Ingresos Hoy" 
-          value="$0.00" 
+          value={`$${todayIncome.toFixed(2)}`} 
           icon={Wallet} 
           color="purple"
         />
