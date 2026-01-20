@@ -16,10 +16,13 @@ function LoginPage() {
     try {
       // IMPORTANTE: los nombres de campo deben coincidir con tu API de Django.
       // Si en Django usas "username" y "password", cambia aquí los nombres.
-      await login({ usuario, clave });
+      const res = await login({ usuario, clave });
+      if (res.data.is_admin) {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/');
+      }
 
-      // Redirigir después de login
-      navigate('/');
     } catch (err) {
       setError(err?.response?.data?.message || 'Usuario o clave incorrectos');
     }

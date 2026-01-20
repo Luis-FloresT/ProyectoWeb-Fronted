@@ -27,6 +27,7 @@ import Proveedor from "./pages/Proveedor";
 
 import CalendarioReservas from "./pages/CalendarioReservas";
 import PaginaVerificacion from "./pages/PaginaVerificacion";
+import AdminDashboard from "./pages/AdminDashboard";
 
 
 import './App.css';
@@ -54,6 +55,7 @@ function App() {
 					<Route path="/reservas" element={<ProtectedRoute><PaginaReservas /></ProtectedRoute>} />
 					<Route path="/pagos" element={<ProtectedRoute><PaginaPagos /></ProtectedRoute>} />
 					<Route path="/cancelaciones" element={<ProtectedRoute><PaginaCancelaciones /></ProtectedRoute>} />
+					<Route path="/admin-dashboard" element={<AdminDashboard />} />
 
 					{/* Ruta por defecto */}
 					<Route path="*" element={<Navigate to="/" replace />} />

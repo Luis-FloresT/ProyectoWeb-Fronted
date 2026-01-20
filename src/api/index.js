@@ -11,6 +11,7 @@ export {
 export {
   getHorarios, getHorario, getHorariosDisponibles, createHorario, updateHorario, deleteHorario,
   getReservas, getReserva, createReserva, updateReserva, deleteReserva,
+  aprobarReserva, anularReserva, eliminarReserva,
   getPagos, getPago, createPago, updatePago, deletePago,
   getCancelaciones, getCancelacion, createCancelacion, updateCancelacion, deleteCancelacion,
   checkoutPago,
