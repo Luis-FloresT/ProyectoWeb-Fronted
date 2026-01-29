@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
  * This bypasses the persistent splash page warning on free ngrok accounts.
  */
 const SafeImage = ({ src, alt, className, onClick }) => {
-  // En producción con Render, ya no necesitamos el bypass de ngrok.
+  // [ACTUALIZADO] En producción con Render, no necesitamos headers de ngrok.
   // Renderizamos la imagen directamente.
   
   return (
