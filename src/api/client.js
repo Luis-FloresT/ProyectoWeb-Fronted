@@ -8,7 +8,6 @@ const API_URL = `${BASE_URL}/api`;
 // Crear instancia de axios para la API
 const api = axios.create({
   baseURL: API_URL,
-  baseURL: API_URL,
   headers: {} // Headers limpios para producción
 });
 
